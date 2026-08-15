@@ -289,10 +289,55 @@ if (!reduceMotion) {
         }
     }
 
-    gsap.from('.faq-item', {
-        x: 45, opacity: 0, stagger: .05, duration: .6,
-        scrollTrigger: { trigger: '.faq__list', start: 'top 80%' },
-    });
+    // FAQ section animations
+    const faqSection = document.querySelector('.faq');
+    if (faqSection) {
+        const faqIntro = faqSection.querySelector('.faq__intro');
+        const faqItems = faqSection.querySelectorAll('.faq-item');
+        const faqCta = faqSection.querySelector('.faq__cta');
+
+        const faqTl = gsap.timeline({
+            scrollTrigger: { trigger: faqSection, start: 'top 75%' },
+        });
+
+        if (faqIntro) {
+            const kicker = faqIntro.querySelector('.section-kicker');
+            const heading = faqIntro.querySelector('h2');
+            const description = faqIntro.querySelector('p');
+
+            if (kicker) {
+                gsap.set(kicker, { opacity: 0, y: 20 });
+                faqTl.to(kicker, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+            }
+
+            if (heading) {
+                gsap.set(heading, { opacity: 0, y: 30 });
+                faqTl.to(heading, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.1);
+            }
+
+            if (description) {
+                gsap.set(description, { opacity: 0, y: 20 });
+                faqTl.to(description, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.2);
+            }
+        }
+
+        if (faqItems.length > 0) {
+            faqItems.forEach((item, index) => {
+                gsap.set(item, { opacity: 0, y: 20 });
+                faqTl.to(item, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: 'power3.out',
+                }, 0.3 + (index * 0.08));
+            });
+        }
+
+        if (faqCta) {
+            gsap.set(faqCta, { opacity: 0, y: 20 });
+            faqTl.to(faqCta, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.9);
+        }
+    }
 
     gsap.from('.final-cta h2 span,.final-cta h2 em', {
         yPercent: 100, opacity: 0, stagger: .1, duration: 1.1, ease: 'power4.out',

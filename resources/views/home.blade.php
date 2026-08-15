@@ -349,29 +349,43 @@
 
             <section id="preguntas" class="faq section--cream" x-data="{ open: 0 }">
                 <div class="container faq__grid">
-                    <div class="faq__intro"><div class="section-kicker"><span>07</span> Preguntas frecuentes</div><h2>Antes de empezar,<br>hablemos claro.</h2><p>Si algo no aparece aquí, escríbenos. Te respondemos como personas, no como un sistema automático.</p></div>
+                    <div class="faq__intro">
+                        <div class="section-kicker"><span>07</span> Preguntas frecuentes</div>
+                        <h2>Antes de empezar,<br>hablemos claro.</h2>
+                        <p>Resolvemos las dudas más comunes antes de comenzar. Si necesitas algo más específico, escríbenos y lo vemos contigo.</p>
+                    </div>
                     <div class="faq__list">
                         @php($faqs = [
-                            ['¿Qué necesito para comenzar?','La información básica de tu negocio, tus servicios, datos de contacto y las imágenes que quieras usar. Te guiamos con una lista sencilla.'],
-                            ['¿Tengo que tener dominio?','No. Podemos registrar el dominio .com incluido en tu paquete. Si ya tienes uno, también podemos trabajar con él.'],
-                            ['¿El dominio está incluido?','Sí, un dominio .com está incluido durante el primer año en los tres paquetes.'],
-                            ['¿El hosting está incluido?','Sí. Incluimos hosting y certificado SSL durante el primer año.'],
-                            ['¿Qué incluye el soporte?','Atendemos problemas técnicos atribuibles al sitio durante un año. Nuevas secciones, cambios de alcance o contenido recurrente se cotizan por separado.'],
-                            ['¿Qué pasa después del primer año?','Te avisamos con anticipación el costo de renovación de dominio y hosting. Tu sitio no se renueva sin tu autorización.'],
-                            ['¿Cuánto tarda mi página?','Depende del alcance y de qué tan rápido reunamos la información. Una landing suele tomar menos tiempo que un sitio profesional o una tienda. Confirmamos el calendario antes de comenzar.'],
-                            ['¿Puedo solicitar cambios?','Sí. El proceso incluye una etapa de revisión contigo antes de publicar.'],
-                            ['¿Cómo funciona el anticipo?','Pagas el 50% para reservar e iniciar el proyecto. El 50% restante se liquida cuando terminamos, antes de publicar.'],
-                            ['¿Puedo contratar si estoy fuera de México?','Sí. Trabajamos a distancia y puedes elegir “Otro país” durante el checkout.'],
-                            ['¿Cómo pago desde otro país?','El anticipo se procesa mediante PayPal. El resumen siempre te muestra el monto antes de continuar.'],
-                            ['¿La tienda puede tener muchos productos?','Sí. El catálogo es administrable y no presentamos la tienda como un sistema con un límite fijo de productos.'],
-                            ['¿Podré subir productos por mi cuenta?','Sí. Incluimos una carga inicial y capacitación básica para que después agregues productos desde tu panel.'],
+                            ['¿Qué necesito para comenzar?','Solo necesitamos la información básica de tu negocio, servicios, datos de contacto y las imágenes o contenido que quieras utilizar. Te guiamos durante el proceso para que sea sencillo.'],
+                            ['¿Qué incluyen dominio, hosting y SSL?','Los paquetes incluyen dominio .com, hosting y certificado SSL durante el primer año. Si ya tienes dominio o alojamiento, podemos revisar cómo aprovecharlos. Después del primer año podemos ayudarte con la renovación correspondiente.'],
+                            ['¿Cuánto tarda mi página?','El tiempo depende del paquete y de qué tan rápido tengamos el contenido necesario. Una landing sencilla puede estar lista en pocos días; proyectos más grandes requieren más tiempo. Antes de comenzar te indicamos un plazo aproximado.'],
+                            ['¿Puedo solicitar cambios?','Sí. Durante el desarrollo revisamos el proyecto contigo antes de publicarlo. Los ajustes dentro del alcance contratado se revisan durante esta etapa. Cambios adicionales o nuevas funciones pueden cotizarse por separado.'],
+                            ['¿Cómo funciona el anticipo?','Para comenzar solicitamos el 50% del proyecto. El resto se paga al finalizar, cuando el sitio esté aprobado y listo para publicarse.'],
+                            ['¿Puedo contratar si estoy fuera de México?','Sí. Podemos trabajar con clientes de otros países de forma remota. Para México manejamos las opciones de pago disponibles localmente y para clientes internacionales podemos utilizar métodos como PayPal según corresponda.'],
+                            ['¿Cómo funciona una tienda en línea y podré administrarla?','Incluimos la configuración inicial y la carga acordada de productos. Después podrás administrar el catálogo y agregar nuevos productos desde tu panel. El alcance inicial depende de la cantidad de productos, variantes e integraciones que necesites.'],
                         ])
                         @foreach($faqs as $index => $faq)
                             <article class="faq-item" :class="{ 'is-open': open === {{ $index }} }">
-                                <h3><button type="button" @click="open = open === {{ $index }} ? -1 : {{ $index }}" :aria-expanded="open === {{ $index }}"><span>{{ str_pad($index+1,2,'0',STR_PAD_LEFT) }}</span>{{ $faq[0] }}<i></i></button></h3>
-                                <div class="faq-answer" x-cloak x-show="open === {{ $index }}" x-collapse><p>{{ $faq[1] }}</p></div>
+                                <h3><button type="button" @click="open = open === {{ $index }} ? -1 : {{ $index }}" :aria-expanded="open === {{ $index }}" :aria-controls="'faq-answer-' + {{ $index }}"><span>{{ str_pad($index+1,2,'0',STR_PAD_LEFT) }}</span>{{ $faq[0] }}<i></i></button></h3>
+                                <div class="faq-answer" id="faq-answer-{{ $index }}" x-cloak x-show="open === {{ $index }}" x-collapse><p>{{ $faq[1] }}</p></div>
                             </article>
                         @endforeach
+                    </div>
+
+                    <div class="faq__cta pricing__guide">
+                        <div class="pricing__guide-content">
+                            <div class="pricing__guide-text">
+                                <h3>¿Te quedó alguna duda?</h3>
+                                <p>Escríbenos y te respondemos directamente.</p>
+                            </div>
+                            <div class="pricing__guide-action">
+                                <a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="pricing__guide-cta" data-analytics="contact_whatsapp">
+                                    <span>Quiero orientación</span>
+                                    <span class="pricing__guide-arrow">→</span>
+                                </a>
+                                <span class="pricing__guide-micro">Sin compromiso.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
