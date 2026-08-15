@@ -22,8 +22,8 @@ Alpine.data('portfolioShowcase', (projects) => ({
     projects,
     active: 0,
     get current() { return this.projects[this.active] || {}; },
-    next() { this.active = (this.active + 1) % this.projects.length; },
-    previous() { this.active = (this.active - 1 + this.projects.length) % this.projects.length; },
+    next() { if (this.projects.length) this.active = (this.active + 1) % this.projects.length; },
+    previous() { if (this.projects.length) this.active = (this.active - 1 + this.projects.length) % this.projects.length; },
 }));
 
 Alpine.data('quoteModal', () => ({
@@ -117,24 +117,6 @@ if (!reduceMotion) {
             onUpdate: () => { number.textContent = Math.round(state.value); },
             scrollTrigger: { trigger: number, start: 'top 85%', once: true },
         });
-    });
-
-    gsap.from('.solution__visual', {
-        clipPath: 'inset(12% 12% 12% 12%)', scale: .93, duration: 1.35, ease: 'power3.out',
-        scrollTrigger: { trigger: '.solution', start: 'top 72%' },
-    });
-    gsap.to('.solution__window', {
-        xPercent: -7, yPercent: -8, ease: 'none',
-        scrollTrigger: { trigger: '.solution', start: 'top bottom', end: 'bottom top', scrub: 1 },
-    });
-
-    gsap.from('.portfolio__intro h2', {
-        xPercent: -10, opacity: 0, duration: 1.2, ease: 'power4.out',
-        scrollTrigger: { trigger: '.portfolio__intro', start: 'top 78%' },
-    });
-    gsap.from('.project-canvas', {
-        clipPath: 'inset(0 100% 0 0)', duration: 1.25, ease: 'power4.inOut',
-        scrollTrigger: { trigger: '.portfolio__showcase', start: 'top 72%' },
     });
 
     gsap.from('.package-reveal', {

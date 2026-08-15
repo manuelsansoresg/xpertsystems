@@ -101,35 +101,65 @@
                 </div>
             </section>
 
-            <section class="solution section--light">
+            <section id="solucion" class="solution section--light">
                 <div class="container solution__grid">
-                    <div class="solution__visual reveal-clip">
-                        <div class="blueprint-grid"></div>
-                        <span class="solution__number">+1</span>
-                        <div class="solution__window">
-                            <small>XPERTSYSTEMS / MÉTODO</small>
-                            <div class="solution__diagram"><span>VISITA</span><i>→</i><span>CONFIANZA</span><i>→</i><strong>CONTACTO</strong></div>
-                        </div>
-                    </div>
                     <div class="solution__copy">
                         <div class="section-kicker"><span>03</span> La solución</div>
-                        <h2 class="split-title">No hacemos sitios únicamente para que <em>“se vean bonitos”.</em></h2>
-                        <p>Diseñamos una ruta clara para que cada visita entienda, confíe y dé el siguiente paso.</p>
+                        <h2><span>No hacemos páginas</span><span>solo para que</span><em>"se vean bonitas".</em></h2>
+                        <div class="solution__accent-line" aria-hidden="true"></div>
+                        <p>Diseñamos cada página para que tu cliente entienda lo que ofreces, confíe en tu negocio y sepa cómo contactarte.</p>
                         <div class="solution__outcomes">
-                            @foreach(['Confianza','Contacto','Prospectos','Ventas','Presencia profesional','Claridad','Experiencia móvil'] as $index => $outcome)
-                                <span><b>{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</b>{{ $outcome }}</span>
-                            @endforeach
+                            <article><span>01</span><i></i><h3>Claridad</h3><p>Estructura que comunica tu propuesta sin ruido.</p></article>
+                            <article><span>02</span><i></i><h3>Confianza</h3><p>Diseño profesional que transmite credibilidad y seguridad.</p></article>
+                            <article><span>03</span><i></i><h3>Contacto</h3><p>Facilitamos que te encuentren y sepan cómo hablarte.</p></article>
+                            <article><span>04</span><i></i><h3>Oportunidades</h3><p>Convertimos visitas en conversaciones que hacen crecer tu negocio.</p></article>
+                        </div>
+                    </div>
+
+                    <div class="solution__visual" aria-label="Recorrido de una visita hasta convertirse en contacto">
+                        <div class="blueprint-grid" aria-hidden="true"></div>
+                        <div class="solution__method">
+                            <ol class="method__timeline">
+                                <li class="method__step">
+                                    <span class="method__marker">01</span>
+                                    <div><h3>Visita</h3><p>Llegan por curiosidad.</p></div>
+                                </li>
+                                <li class="method__step">
+                                    <span class="method__marker">02</span>
+                                    <div><h3>Entiende</h3><p>Entiende tu propuesta, ve el valor y cómo ayudas.</p></div>
+                                </li>
+                                <li class="method__step">
+                                    <span class="method__marker">03</span>
+                                    <div><h3>Confía</h3><p>Tu mensaje genera claridad y confianza. Saben que están en buenas manos.</p></div>
+                                </li>
+                                <li class="method__step method__step--final">
+                                    <span class="method__marker">04</span>
+                                    <div><h3>Contacta</h3><p>Dan el paso. Es fácil contactarte y empiezan la conversación.</p></div>
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="proyectos" class="portfolio section--dark" x-data="portfolioShowcase(@js($projects->map(fn($p) => ['name'=>$p->name,'slug'=>$p->slug,'category'=>$p->category,'description'=>$p->description,'desktop_image'=>$p->desktop_image,'mobile_image'=>$p->mobile_image,'url'=>$p->url,'accent'=>$p->accent])))">
+            @php
+                $portfolioProjects = $projects->map(fn($p) => [
+                    'name' => $p->name,
+                    'slug' => $p->slug,
+                    'category' => $p->category,
+                    'description' => $p->description,
+                    'desktop_image' => $p->desktop_image ?: (file_exists(public_path('images/portafolio/'.$p->slug.'.png')) ? asset('images/portafolio/'.$p->slug.'.png') : null),
+                    'mobile_image' => $p->mobile_image ?: (file_exists(public_path('images/portafolio/'.$p->slug.'-mobile.png')) ? asset('images/portafolio/'.$p->slug.'-mobile.png') : null),
+                    'url' => $p->url,
+                    'accent' => $p->accent,
+                ]);
+            @endphp
+            <section id="proyectos" class="portfolio section--dark" x-data="portfolioShowcase(@js($portfolioProjects))">
                 <div class="container">
                     <div class="portfolio__intro">
                         <div class="section-kicker section-kicker--light"><span>04</span> Trabajo seleccionado</div>
-                        <h2>Proyectos con una idea clara detrás.</h2>
-                        <p>Diseño pensado para el negocio, no para llenar una plantilla.</p>
+                        <h2><span>Proyectos con</span><span>una idea clara detrás.</span></h2>
+                        <p>Diseño y desarrollo digital pensado para impulsar negocios con propósito.</p>
                     </div>
                     <div class="portfolio__showcase">
                         <div class="portfolio__rail" role="tablist" aria-label="Proyectos">
@@ -139,17 +169,26 @@
                                 </button>
                             </template>
                         </div>
-                        <div class="portfolio__stage" :style="`--project-accent:${current.accent}`">
-                            <div class="project-meta"><span x-text="String(active + 1).padStart(2,'0') + ' / ' + String(projects.length).padStart(2,'0')"></span><small x-text="current.category || 'Proyecto web' "></small></div>
+                        <div class="portfolio__stage" :style="`--project-accent:${current.accent || '#d8b675'}`" aria-live="polite">
+                            <div class="project-meta"><span aria-hidden="true"></span><small x-text="current.category || 'Proyecto web'"></small></div>
                             <div class="project-canvas">
                                 <div class="project-browser">
                                     <div class="browser__bar"><i></i><i></i><i></i><span x-text="current.slug + '.com'"></span></div>
                                     <template x-if="current.desktop_image"><img :src="current.desktop_image" :alt="`Vista de ${current.name}`"></template>
-                                    <template x-if="!current.desktop_image"><div class="project-art"><small>PROYECTO DIGITAL</small><b x-text="current.name"></b><span>Diseño con intención<br>y una dirección propia.</span><em>Descubrir →</em></div></template>
+                                    <template x-if="!current.desktop_image"><div class="project-art"><div class="project-art__nav"><strong x-text="current.name"></strong><span>Proyecto / 2026</span></div><div class="project-art__body"><small>DISEÑO WEB A MEDIDA</small><b>Una presencia<br>con intención.</b><p>Claridad, identidad y una experiencia pensada para conectar.</p><em>Descubrir →</em></div></div></template>
                                 </div>
-                                <div class="project-phone"><div><small>XS / MOBILE</small><b x-text="current.name"></b><span></span><span></span><i>Explorar →</i></div></div>
+                                <template x-if="current.mobile_image">
+                                    <div class="project-phone">
+                                        <span class="project-phone__notch" aria-hidden="true"></span>
+                                        <img :src="current.mobile_image" :alt="`Vista móvil de ${current.name}`">
+                                    </div>
+                                </template>
                             </div>
-                            <div class="project-caption"><h3 x-text="current.name"></h3><p x-text="current.description || 'Identidad, estructura y experiencia alineadas en una presencia digital clara.'"></p><a x-show="current.url" :href="current.url" target="_blank" rel="noopener">Visitar proyecto ↗</a></div>
+                            <div class="project-caption">
+                                <div class="project-caption__copy"><h3 x-text="current.name"></h3><p x-text="current.description || 'Diseño y desarrollo de una experiencia digital serena, clara y enfocada en el usuario.'"></p></div>
+                                <template x-if="current.url"><a :href="current.url" target="_blank" rel="noopener">Ver proyecto <span>→</span></a></template>
+                                <template x-if="!current.url"><span class="project-caption__link is-disabled" aria-disabled="true">Ver proyecto <i>→</i></span></template>
+                            </div>
                             <div class="portfolio__mobile-controls"><button @click="previous" aria-label="Proyecto anterior">←</button><span x-text="`${active+1} / ${projects.length}`"></span><button @click="next" aria-label="Proyecto siguiente">→</button></div>
                         </div>
                     </div>
