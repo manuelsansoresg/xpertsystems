@@ -67,15 +67,47 @@ if (!reduceMotion) {
         });
     });
 
-    gsap.from('.problem__list li', {
-        xPercent: 12, opacity: 0, stagger: .12, duration: .9, ease: 'power3.out',
-        scrollTrigger: { trigger: '.problem__list', start: 'top 78%' },
-    });
+    // Problem section animations
+    const problemSection = document.querySelector('.problem');
+    if (problemSection) {
+        const kicker = problemSection.querySelector('.section-kicker');
+        const headline = problemSection.querySelector('.problem__headline');
+        const lead = problemSection.querySelector('.problem__lead');
+        const signal = problemSection.querySelector('.problem__signal');
+        const ring = problemSection.querySelector('.signal__ring');
 
-    gsap.from('.problem blockquote', {
-        backgroundSize: '0% 100%', opacity: .15, duration: 1.3,
-        scrollTrigger: { trigger: '.problem blockquote', start: 'top 82%', end: 'center 55%', scrub: 1 },
-    });
+        const tl = gsap.timeline({
+            scrollTrigger: { trigger: problemSection, start: 'top 78%' },
+        });
+
+        if (kicker) {
+            tl.from(kicker, { opacity: 0, y: 20, duration: .6, ease: 'power3.out' }, 0);
+        }
+        if (headline) {
+            tl.from(headline, { clipPath: 'inset(0 0 100% 0)', y: 40, duration: 1, ease: 'power4.out' }, .1);
+        }
+        if (lead) {
+            tl.from(lead, { opacity: 0, y: 24, duration: .8, ease: 'power3.out' }, .3);
+        }
+        if (ring) {
+            tl.from(ring, { scale: .85, opacity: 0, duration: .9, ease: 'power3.out' }, .35);
+        }
+        if (signal) {
+            tl.from(signal.querySelector('p'), { opacity: 0, y: 16, duration: .7, ease: 'power3.out' }, .5);
+        }
+
+        // Subtle parallax between headline and signal
+        if (headline && signal) {
+            gsap.to(headline, {
+                yPercent: -4, ease: 'none',
+                scrollTrigger: { trigger: problemSection, start: 'top bottom', end: 'bottom top', scrub: 1 },
+            });
+            gsap.to(signal, {
+                yPercent: 3, ease: 'none',
+                scrollTrigger: { trigger: problemSection, start: 'top bottom', end: 'bottom top', scrub: 1 },
+            });
+        }
+    }
 
     document.querySelectorAll('[data-count]').forEach((number) => {
         const target = Number(number.dataset.count);

@@ -87,22 +87,17 @@
 
             <section id="servicios" class="problem section--cream">
                 <div class="container problem__grid">
-                    <div class="section-kicker"><span>02</span> El problema</div>
-                    <div class="problem__question">
-                        <h2 class="split-title">¿Tu negocio depende solamente de <em>Facebook o Instagram?</em></h2>
-                        <p class="problem__lead">Las redes ayudan a encontrarte. Pero no deberían ser el único lugar donde tus clientes intentan entenderte.</p>
+                    <div class="problem__left">
+                        <div class="section-kicker"><span>02</span> El problema</div>
+                        <h2 class="problem__headline">¿Tu negocio vive solo en <em>redes sociales?</em></h2>
+                        <p class="problem__lead">Las redes te ayudan a atraer personas. Tu sitio debe encargarse de explicar, generar confianza y facilitar el contacto.</p>
                     </div>
-                    <div class="problem__signal" aria-hidden="true">
-                        <div class="signal__ring"><span class="signal__value" data-count="24">0</span><small>/ 7</small></div>
-                        <p>Tu sitio sigue trabajando<br>cuando tú no estás conectado.</p>
+                    <div class="problem__right">
+                        <div class="problem__signal" aria-hidden="true">
+                            <div class="signal__ring"><span class="signal__value" data-count="24">0</span><small>/ 7</small></div>
+                            <p>Tu sitio sigue trabajando<br>aunque tú no estés conectado.</p>
+                        </div>
                     </div>
-                    <ol class="problem__list">
-                        <li><span>01</span><p>La información importante se pierde entre publicaciones.</p></li>
-                        <li><span>02</span><p>El cliente no encuentra todos tus servicios con claridad.</p></li>
-                        <li><span>03</span><p>Dependes de un algoritmo y de una plataforma que no controlas.</p></li>
-                        <li><span>04</span><p>Sin un espacio propio, transmitir confianza cuesta más.</p></li>
-                    </ol>
-                    <blockquote>Tu página debe trabajar para tu negocio incluso cuando tú no estás conectado.</blockquote>
                 </div>
             </section>
 
