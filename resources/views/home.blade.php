@@ -43,15 +43,15 @@
                         <div class="hero__eyebrow reveal-line"><span class="status-dot"></span> Desarrollo web para negocios que quieren crecer</div>
                         <div class="hero__headline">
                             <h1>
-                                <span class="headline-mask"><span>Tu negocio merece</span></span>
-                                <span class="headline-mask"><span>más que solo</span></span>
-                                <span class="headline-mask headline-mask--accent"><span>redes sociales.</span></span>
+                                <span>Tu negocio merece</span>
+                                <span>más que solo</span>
+                                <em>redes sociales.</em>
                             </h1>
                         </div>
                         <div class="hero__copy reveal-up">
                             <p>Creamos sitios web profesionales diseñados para generar confianza, mostrar tus servicios y convertir visitantes en clientes.</p>
                             <div class="hero__actions">
-                                <a href="#paquetes" class="button button--gold magnetic" data-analytics="view_packages">Ver paquetes <span>↘</span></a>
+                                <a href="#paquetes" class="button button--gold" data-analytics="view_packages">Ver paquetes <span>↘</span></a>
                                 <a href="{{ $waHero }}" class="button button--text" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" data-analytics="contact_whatsapp">Hablar por WhatsApp <span>↗</span></a>
                             </div>
                             <div class="hero__assurance"><span>✓</span> Dominio + Hosting + SSL incluidos durante 1 año.</div>
@@ -59,27 +59,28 @@
                     </div>
 
                     <div class="hero-stage" aria-label="Muestra de una experiencia web en computadora y teléfono">
-                        <div class="orbit orbit--one" aria-hidden="true"></div><div class="orbit orbit--two" aria-hidden="true"></div>
-                        <div class="browser browser--primary hero-parallax" data-speed="0.12">
-                            <div class="browser__bar"><i></i><i></i><i></i><span>xpertsystems / proyecto</span></div>
+                        <div class="hero-stage__halo" aria-hidden="true"></div>
+                        <div class="browser browser--primary">
+                            <div class="browser__bar"><i></i><i></i><i></i><span>xpertsystems / presencia digital</span></div>
                             <div class="browser__content browser__content--main">
-                                <div class="mock-nav"><b>MARCA</b><span></span><span></span><em>CONTACTO</em></div>
-                                <div class="mock-hero"><small>ESTUDIO / 2026</small><strong>Una presencia que<br>sí representa tu nivel.</strong><i></i></div>
+                                <div class="mock-nav"><b>MARCA</b><em>PROYECTO DIGITAL</em></div>
+                                <div class="mock-hero">
+                                    <small>ESTUDIO / 2026</small>
+                                    <strong><span>Una presencia digital</span><em>a la altura de tu negocio.</em></strong>
+                                    <i></i>
+                                </div>
                                 <div class="mock-footer"><span>DISEÑO A MEDIDA</span><span>RESPONSIVE</span><span>CONVERSIÓN</span></div>
                             </div>
                         </div>
-                        <div class="phone hero-parallax" data-speed="0.18"><div class="phone__notch"></div><div class="phone__screen"><span>XS</span><small>DISEÑO WEB</small><b>Tu negocio,<br>bien presentado.</b><i>Explorar →</i></div></div>
+                        <div class="phone"><div class="phone__notch"></div><div class="phone__screen"><span>XS</span><small>RESPONSIVE</small><b>Tu sitio.<br><em>Impecable.</em></b><i>Explorar →</i></div></div>
                     </div>
                 </div>
             </section>
 
             <aside class="trust-strip" aria-label="Beneficios incluidos">
                 <div class="trust-strip__track">
-                    @foreach(array_merge(
-                        ['Dominio incluido','Hosting incluido','SSL','Diseño responsive','Soporte técnico','Atención personalizada'],
-                        ['Dominio incluido','Hosting incluido','SSL','Diseño responsive','Soporte técnico','Atención personalizada']
-                    ) as $item)
-                        <span>{{ $item }} <i>✦</i></span>
+                    @foreach(['Dominio incluido','Hosting incluido','SSL','Diseño responsive','Soporte técnico','Atención personalizada'] as $item)
+                        <span>{{ $item }}</span>
                     @endforeach
                 </div>
             </aside>

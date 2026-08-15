@@ -60,38 +60,6 @@ if (document.querySelector('.pricing')) {
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 if (!reduceMotion) {
-    const heroTimeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
-    heroTimeline
-        .from('.hero__eyebrow', { opacity: 0, x: -18, duration: .55 })
-        .from('.headline-mask:not(.headline-mask--accent) span', { yPercent: 110, rotate: 1.5, duration: .9, stagger: .1 }, '-=.25')
-        .from('.headline-mask--accent span', { yPercent: 110, xPercent: -3, duration: .9 }, '-=.68')
-        .from('.hero__copy > p', { opacity: 0, y: 24, duration: .55 }, '-=.5')
-        .from('.hero__actions', { opacity: 0, y: 18, duration: .5 }, '-=.34')
-        .from('.hero__assurance', { opacity: 0, x: -15, duration: .45 }, '-=.28')
-        .from('.browser--primary', { opacity: 0, x: 65, y: 48, rotateY: -8, duration: .85 }, '-=.62')
-        .from('.phone', { opacity: 0, y: 38, rotate: 5, duration: .55 }, '-=.52');
-
-    gsap.to('.hero-stage', {
-        y: 10, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
-    });
-
-    gsap.to('.hero .orbit--one', {
-        y: 14, x: 8, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
-    });
-    gsap.to('.hero .orbit--two', {
-        y: 9, x: -6, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 },
-    });
-
-    document.querySelectorAll('.hero-parallax').forEach((element) => {
-        gsap.to(element, {
-            y: () => 180 * Number(element.dataset.speed || .1), ease: 'none',
-            scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-        });
-    });
-
     document.querySelectorAll('.split-title').forEach((title) => {
         gsap.from(title, {
             clipPath: 'inset(0 0 100% 0)', y: 60, duration: 1.1, ease: 'power4.out',
@@ -166,13 +134,4 @@ if (!reduceMotion) {
         scrollTrigger: { trigger: '.final-cta', start: 'top bottom', end: 'bottom top', scrub: 1 },
     });
 
-    if (window.matchMedia('(pointer:fine)').matches) {
-        document.querySelectorAll('.magnetic').forEach((button) => {
-            button.addEventListener('mousemove', (event) => {
-                const rect = button.getBoundingClientRect();
-                gsap.to(button, { x: (event.clientX - rect.left - rect.width / 2) * .13, y: (event.clientY - rect.top - rect.height / 2) * .18, duration: .3 });
-            });
-            button.addEventListener('mouseleave', () => gsap.to(button, { x: 0, y: 0, duration: .5, ease: 'elastic.out(1,.45)' }));
-        });
-    }
 }
