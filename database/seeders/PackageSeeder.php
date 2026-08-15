@@ -35,7 +35,7 @@ class PackageSeeder extends Seeder
                 'direct_checkout' => false, 'requires_quote' => true, 'deposit_percentage' => null,
                 'featured' => false,
                 'features' => ['WordPress + WooCommerce cuando sea la solución adecuada', 'Diseño personalizado', 'Diseño responsive', 'Catálogo administrable', 'Carrito de compras', 'Checkout', 'Pagos en línea', 'Configuración inicial de método de pago', 'Configuración básica de envíos', 'Botón de WhatsApp', 'SEO básico', 'Capacitación básica', 'Carga inicial de productos incluida', 'Administración posterior por parte del cliente', 'Dominio .com durante 1 año', 'Hosting durante 1 año', 'Certificado SSL', 'Soporte técnico por problemas del sitio durante 1 año'],
-                'note' => 'Incluye carga inicial de productos. Posteriormente podrás agregar nuevos productos desde tu panel. El precio puede variar según la cantidad inicial de productos, funcionalidades e integraciones requeridas.',
+                'note' => 'Incluye carga inicial de productos. Después podrás seguir agregando más desde tu panel.',
                 'sort_order' => 3,
             ],
         ];

@@ -196,40 +196,110 @@
 
             <section id="paquetes" class="pricing section--cream" x-data="quoteModal">
                 <div class="container">
-                    <div class="pricing__intro">
+                    <header class="pricing__header">
                         <div class="section-kicker"><span>05</span> Elige cómo empezar</div>
-                        <h2>Una inversión clara.<br><em>Todo desde el inicio.</em></h2>
-                        <p>Sabes qué incluye tu proyecto antes de comenzar: sin sorpresas y con una base técnica completa.</p>
-                        <p class="pricing__intro-note">Dominio, hosting y SSL incluidos durante 1 año.</p>
-                    </div>
-                    <div class="pricing__composition">
+                        <h2>Tres formas de empezar.<br><em>Una meta: hacer crecer tu presencia digital.</em></h2>
+                        <p>Todos los paquetes incluyen una base técnica sólida para publicar con confianza desde el primer día.</p>
+                    </header>
+
+                    <div class="pricing__grid">
                         @foreach($packages as $package)
-                            <article class="package package--{{ $package->featured ? 'featured' : ($loop->first ? 'starter' : 'store') }} package-reveal">
-                                <header>
-                                    <div class="package__topline"><span>0{{ $loop->iteration }}</span>@if($package->badge)<b>{{ $package->badge }}</b>@endif</div>
-                                    <h3>{{ $package->name }}</h3>
-                                    <p>{{ $package->short_description }}</p>
-                                    <div class="package__price">@if($package->price_type === 'starting_at')<small>Desde</small>@endif <strong>${{ number_format((float)$package->price, 0) }}</strong><span>MXN</span></div>
-                                    @if($package->direct_checkout)
-                                        <div class="package__split"><span>Anticipo <b>${{ number_format($package->deposit_amount, 0) }}</b></span><i></i><span>Al finalizar <b>${{ number_format((float)$package->price - $package->deposit_amount, 0) }}</b></span></div>
-                                    @endif
-                                </header>
-                                <div class="package__features">
-                                    <button type="button" class="package__features-toggle" @click="$el.parentElement.classList.toggle('is-open')">Lo que incluye <span>+</span></button>
-                                    <ul>
-                                        @foreach($package->features as $feature)<li><span>✓</span>{{ $feature }}</li>@endforeach
-                                    </ul>
-                                    @if($package->note)<p class="package__note">{{ $package->note }}</p>@endif
+                            @php
+                                $keyFeatures = match($package->slug) {
+                                    'landing-page' => ['Landing diseñada a medida', 'Diseño responsive', 'Formulario de contacto', 'Botón de WhatsApp', 'SEO básico incluido'],
+                                    'pagina-profesional' => ['Hasta 5 secciones', 'Diseño personalizado', 'Diseño responsive', 'Presentación de servicios', 'Formulario de contacto', 'Optimización inicial para Google'],
+                                    'tienda-en-linea' => ['Diseño personalizado', 'Catálogo administrable', 'Carrito de compras', 'Checkout', 'Pagos en línea', 'SEO básico para tienda y productos'],
+                                    default => array_slice($package->features, 0, 5)
+                                };
+                                $detailFeatures = array_diff($package->features, $keyFeatures);
+
+                                $seoDetails = match($package->slug) {
+                                    'landing-page' => ['Títulos y meta descripción básicos', 'Estructura semántica', 'Preparación para indexación', 'Diseño responsive'],
+                                    'pagina-profesional' => ['Títulos y meta descripciones de páginas principales', 'Estructura semántica', 'URLs limpias cuando corresponda', 'Preparación para indexación', 'Optimización técnica inicial'],
+                                    'tienda-en-linea' => ['Estructura SEO básica de catálogo', 'Títulos y meta básicos', 'Estructura de productos y categorías', 'Diseño responsive', 'Preparación para indexación'],
+                                    default => []
+                                };
+                            @endphp
+
+                            <article class="pkg pkg--{{ $package->featured ? 'featured' : ($loop->first ? 'starter' : 'store') }} package-reveal">
+                                <div class="pkg__header">
+                                    <span class="pkg__number">0{{ $loop->iteration }}</span>
+                                    @if($package->badge)<span class="pkg__badge">{{ $package->badge }}</span>@endif
                                 </div>
-                                @if($package->direct_checkout)
-                                    <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Elegir {{ $package->featured ? 'Profesional' : 'Landing' }} <span>→</span></a>
-                                @else
-                                    <button type="button" @click="open({{ $package->id }})" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Cotizar tienda <span>→</span></button>
+
+                                <h3 class="pkg__name">{{ $package->name }}</h3>
+                                <p class="pkg__desc">{{ $package->short_description }}</p>
+
+                                <div class="pkg__price-block">
+                                    <div class="pkg__price">
+                                        @if($package->price_type === 'starting_at')<span class="pkg__price-label">Desde</span>@endif
+                                        <strong>${{ number_format((float)$package->price, 0) }}</strong>
+                                        <span class="pkg__currency">MXN</span>
+                                    </div>
+                                    @if($package->direct_checkout)
+                                        <div class="pkg__payment">
+                                            <div><span>Anticipo</span><b>${{ number_format($package->deposit_amount, 0) }}</b></div>
+                                            <div><span>Al finalizar</span><b>${{ number_format((float)$package->price - $package->deposit_amount, 0) }}</b></div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <ul class="pkg__features">
+                                    @foreach($keyFeatures as $feature)<li><span>✓</span>{{ $feature }}</li>@endforeach
+                                </ul>
+
+                                @if(count($detailFeatures) > 0 || count($seoDetails) > 0)
+                                    <div class="pkg__details" x-data="{ open: false }">
+                                        <button type="button" class="pkg__details-toggle" @click="open = !open" :aria-expanded="open">
+                                            <span x-text="open ? 'Ver menos' : 'Ver detalles'"></span>
+                                            <i x-text="open ? '−' : '+'"></i>
+                                        </button>
+                                        <div x-show="open" x-collapse>
+                                            @if(count($detailFeatures) > 0)
+                                                <ul class="pkg__details-list">
+                                                    @foreach($detailFeatures as $feature)<li><span>✓</span>{{ $feature }}</li>@endforeach
+                                                </ul>
+                                            @endif
+                                            @if(count($seoDetails) > 0)
+                                                <div class="pkg__seo-details">
+                                                    <span class="pkg__seo-label">SEO y Google:</span>
+                                                    <ul class="pkg__details-list">
+                                                        @foreach($seoDetails as $detail)<li><span>✓</span>{{ $detail }}</li>@endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 @endif
+
+                                @if($package->note)<p class="pkg__note">{{ $package->note }}</p>@endif
+
+                                <div class="pkg__action">
+                                    @if($package->direct_checkout)
+                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Elegir {{ $package->featured ? 'Profesional' : 'Landing' }} <span>→</span></a>
+                                    @else
+                                        <button type="button" @click="open({{ $package->id }})" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Cotizar tienda <span>→</span></button>
+                                    @endif
+                                </div>
                             </article>
                         @endforeach
                     </div>
-                    <div class="pricing__help"><span>¿No sabes cuál te conviene?</span><a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" data-analytics="contact_whatsapp">Cuéntanos sobre tu negocio →</a></div>
+
+                    <div class="pricing__guide">
+                        <div class="pricing__guide-content">
+                            <div class="pricing__guide-text">
+                                <h3>¿No sabes cuál paquete te conviene?</h3>
+                                <p>Cuéntanos sobre tu negocio y te ayudamos a elegir la opción adecuada.</p>
+                            </div>
+                            <div class="pricing__guide-action">
+                                <a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="pricing__guide-cta" data-analytics="contact_whatsapp">
+                                    <span>Quiero orientación</span>
+                                    <span class="pricing__guide-arrow">→</span>
+                                </a>
+                                <span class="pricing__guide-micro">Sin compromiso.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal" x-cloak x-show="visible" x-transition.opacity @keydown.escape.window="close" role="dialog" aria-modal="true" aria-labelledby="quote-title">

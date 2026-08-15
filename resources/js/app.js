@@ -119,11 +119,83 @@ if (!reduceMotion) {
         });
     });
 
-    gsap.from('.package-reveal', {
-        y: 100, rotateX: 8, opacity: 0, transformOrigin: '50% 100%', duration: 1.1,
-        stagger: .15, ease: 'power3.out',
-        scrollTrigger: { trigger: '.pricing__composition', start: 'top 78%' },
-    });
+    // Pricing section animations - Enhanced
+    const pricingSection = document.querySelector('.pricing');
+    if (pricingSection) {
+        const pricingHeader = pricingSection.querySelector('.pricing__header');
+        const pricingCards = pricingSection.querySelectorAll('.pkg');
+        const pricingGuide = pricingSection.querySelector('.pricing__guide');
+
+        // Set initial state for cards
+        gsap.set(pricingCards, { opacity: 0, y: 45 });
+
+        const pricingTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: pricingSection,
+                start: 'top 75%',
+                toggleActions: 'play none none none',
+            },
+        });
+
+        // Animate header elements
+        if (pricingHeader) {
+            const kicker = pricingHeader.querySelector('.section-kicker');
+            const heading = pricingHeader.querySelector('h2');
+            const description = pricingHeader.querySelector('p');
+
+            if (kicker) {
+                gsap.set(kicker, { opacity: 0, y: 20 });
+                pricingTl.to(kicker, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+            }
+
+            if (heading) {
+                gsap.set(heading, { opacity: 0, y: 30 });
+                pricingTl.to(heading, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.1);
+            }
+
+            if (description) {
+                gsap.set(description, { opacity: 0, y: 20 });
+                pricingTl.to(description, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.2);
+            }
+        }
+
+        // Animate cards with stagger
+        if (pricingCards.length > 0) {
+            pricingCards.forEach((card, index) => {
+                const isFeatured = card.classList.contains('pkg--featured');
+                const delay = 0.3 + (index * 0.15);
+
+                pricingTl.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    scale: isFeatured ? 1 : undefined,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                }, delay);
+
+                // Featured card starts slightly smaller
+                if (isFeatured) {
+                    gsap.set(card, { scale: 0.97 });
+                }
+            });
+        }
+
+        // Animate guide section
+        if (pricingGuide) {
+            const guideText = pricingGuide.querySelector('.pricing__guide-text');
+            const guideAction = pricingGuide.querySelector('.pricing__guide-action');
+
+            if (guideText) {
+                gsap.set(guideText, { opacity: 0, y: 20 });
+                pricingTl.to(guideText, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.8);
+            }
+
+            if (guideAction) {
+                gsap.set(guideAction, { opacity: 0, y: 20 });
+                pricingTl.to(guideAction, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.95);
+            }
+        }
+    }
 
     gsap.to('.process__timeline', {
         '--timeline-progress': '100%', ease: 'none',
