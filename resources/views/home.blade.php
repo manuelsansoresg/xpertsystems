@@ -395,8 +395,12 @@
                 <div class="container final-cta__inner">
                     <div class="section-kicker section-kicker--light"><span>08</span> Tu siguiente paso</div>
                     <h2><span>Tu próximo cliente</span><span>puede estar buscándote</span><em>ahora.</em></h2>
-                    <p>Haz que encuentre un negocio que se vea profesional y le dé confianza para contactarte.</p>
-                    <div class="final-cta__actions"><a href="#paquetes" class="button button--gold" data-analytics="view_packages">Ver paquetes <span>↘</span></a><a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="button button--outline" data-analytics="contact_whatsapp">Hablar por WhatsApp <span>↗</span></a></div>
+                    <p>Haz que cuando te encuentre, vea un negocio profesional, confiable y fácil de contactar.</p>
+                    <div class="final-cta__actions">
+                        <a href="#paquetes" class="button button--gold button--lg" data-analytics="view_packages">Ver paquetes <span class="final-cta__arrow">→</span></a>
+                        <a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="button button--outline button--lg" data-analytics="contact_whatsapp">Hablar por WhatsApp <span class="final-cta__arrow">↗</span></a>
+                    </div>
+                    <p class="final-cta__micro">Cuéntanos qué necesita tu negocio y te orientamos sin compromiso.</p>
                     <div class="final-cta__stamp"><x-brand /></div>
                 </div>
             </section>

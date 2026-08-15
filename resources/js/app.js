@@ -339,13 +339,66 @@ if (!reduceMotion) {
         }
     }
 
-    gsap.from('.final-cta h2 span,.final-cta h2 em', {
-        yPercent: 100, opacity: 0, stagger: .1, duration: 1.1, ease: 'power4.out',
-        scrollTrigger: { trigger: '.final-cta h2', start: 'top 82%' },
-    });
-    gsap.to('.final-cta__orb', {
-        rotate: 24, scale: 1.14, ease: 'none',
-        scrollTrigger: { trigger: '.final-cta', start: 'top bottom', end: 'bottom top', scrub: 1 },
-    });
+    // Final CTA animations
+    const finalCta = document.querySelector('.final-cta');
+    if (finalCta) {
+        const finalKicker = finalCta.querySelector('.section-kicker');
+        const finalHeading = finalCta.querySelector('h2');
+        const finalDesc = finalCta.querySelector(':scope > .final-cta__inner > p:not(.final-cta__micro)');
+        const finalActions = finalCta.querySelector('.final-cta__actions');
+        const finalMicro = finalCta.querySelector('.final-cta__micro');
+        const finalStamp = finalCta.querySelector('.final-cta__stamp');
+
+        const finalTl = gsap.timeline({
+            scrollTrigger: { trigger: finalCta, start: 'top 75%' },
+        });
+
+        if (finalKicker) {
+            gsap.set(finalKicker, { opacity: 0, y: 20 });
+            finalTl.to(finalKicker, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+        }
+
+        if (finalHeading) {
+            const headingLines = finalHeading.querySelectorAll('span, em');
+            headingLines.forEach((line, i) => {
+                gsap.set(line, { yPercent: 100, opacity: 0 });
+                finalTl.to(line, {
+                    yPercent: 0, opacity: 1, duration: 0.9, ease: 'power4.out',
+                }, 0.08 + (i * 0.1));
+            });
+        }
+
+        if (finalDesc) {
+            gsap.set(finalDesc, { opacity: 0, y: 20 });
+            finalTl.to(finalDesc, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.45);
+        }
+
+        if (finalActions) {
+            const buttons = finalActions.querySelectorAll('.button');
+            buttons.forEach((btn, i) => {
+                gsap.set(btn, { opacity: 0, y: 20 });
+                finalTl.to(btn, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.55 + (i * 0.08));
+            });
+        }
+
+        if (finalMicro) {
+            gsap.set(finalMicro, { opacity: 0, y: 15 });
+            finalTl.to(finalMicro, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.75);
+        }
+
+        if (finalStamp) {
+            gsap.set(finalStamp, { opacity: 0 });
+            finalTl.to(finalStamp, { opacity: 0.15, duration: 1, ease: 'power2.out' }, 0.85);
+        }
+
+        // Subtle orb parallax
+        const orb = finalCta.querySelector('.final-cta__orb');
+        if (orb) {
+            gsap.to(orb, {
+                yPercent: -8, ease: 'none',
+                scrollTrigger: { trigger: finalCta, start: 'top bottom', end: 'bottom top', scrub: 1 },
+            });
+        }
+    }
 
 }
