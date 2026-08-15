@@ -11,14 +11,10 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         $projects = [
-            ['name' => 'Ramcen', 'accent' => '#E0C287'],
             ['name' => 'Drooopy', 'accent' => '#71A6B8'],
+            ['name' => 'Ramcen', 'accent' => '#E0C287'],
             ['name' => 'Invitatorio', 'accent' => '#D39BA6'],
-            ['name' => 'Spa Rosas y Girasoles', 'accent' => '#D7A967'],
-            ['name' => 'Kaax Club', 'accent' => '#6E9A75'],
-            ['name' => 'Enterwork', 'accent' => '#7B91C1'],
-            ['name' => 'UFC Gym', 'accent' => '#C75E52'],
-            ['name' => 'Luis Gantús', 'accent' => '#B8A98B'],
+            ['name' => 'Rosas & Girasoles', 'accent' => '#D7A967'],
         ];
 
         foreach ($projects as $index => $project) {

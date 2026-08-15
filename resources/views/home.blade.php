@@ -173,9 +173,8 @@
                             <div class="project-meta"><span aria-hidden="true"></span><small x-text="current.category || 'Proyecto web'"></small></div>
                             <div class="project-canvas">
                                 <div class="project-browser">
-                                    <div class="browser__bar"><i></i><i></i><i></i><span x-text="current.slug + '.com'"></span></div>
                                     <template x-if="current.desktop_image"><img :src="current.desktop_image" :alt="`Vista de ${current.name}`"></template>
-                                    <template x-if="!current.desktop_image"><div class="project-art"><div class="project-art__nav"><strong x-text="current.name"></strong><span>Proyecto / 2026</span></div><div class="project-art__body"><small>DISEÑO WEB A MEDIDA</small><b>Una presencia<br>con intención.</b><p>Claridad, identidad y una experiencia pensada para conectar.</p><em>Descubrir →</em></div></div></template>
+                                    <template x-if="!current.desktop_image"><div class="project-art"><div class="browser__bar"><i></i><i></i><i></i><span x-text="current.slug + '.com'"></span></div><div class="project-art__inner"><div class="project-art__nav"><strong x-text="current.name"></strong><span>Proyecto / 2026</span></div><div class="project-art__body"><small>DISEÑO WEB A MEDIDA</small><b>Una presencia<br>con intención.</b><p>Claridad, identidad y una experiencia pensada para conectar.</p><em>Descubrir →</em></div></div></div></template>
                                 </div>
                                 <template x-if="current.mobile_image">
                                     <div class="project-phone">
