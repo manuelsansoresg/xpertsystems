@@ -35,4 +35,23 @@ return [
         ],
     ],
 
+    'mercado_pago' => [
+        'access_token' => env('MERCADO_PAGO_ACCESS_TOKEN'),
+        'webhook_secret' => env('MERCADO_PAGO_WEBHOOK_SECRET'),
+    ],
+
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+        'secret' => env('PAYPAL_SECRET'),
+        'webhook_id' => env('PAYPAL_WEBHOOK_ID'),
+        'base_url' => env('PAYPAL_MODE', 'sandbox') === 'live'
+            ? 'https://api-m.paypal.com'
+            : 'https://api-m.sandbox.paypal.com',
+    ],
+
+    'analytics' => [
+        'ga4_id' => env('GA4_MEASUREMENT_ID'),
+        'meta_pixel_id' => env('META_PIXEL_ID'),
+    ],
+
 ];
