@@ -198,8 +198,9 @@
                 <div class="container">
                     <div class="pricing__intro">
                         <div class="section-kicker"><span>05</span> Elige cómo empezar</div>
-                        <h2>Una inversión clara.<br><em>Sin letras pequeñas.</em></h2>
-                        <p>Todos los paquetes incluyen la base técnica para publicar con confianza desde el primer día.</p>
+                        <h2>Una inversión clara.<br><em>Todo desde el inicio.</em></h2>
+                        <p>Sabes qué incluye tu proyecto antes de comenzar: sin sorpresas y con una base técnica completa.</p>
+                        <p class="pricing__intro-note">Dominio, hosting y SSL incluidos durante 1 año.</p>
                     </div>
                     <div class="pricing__composition">
                         @foreach($packages as $package)
