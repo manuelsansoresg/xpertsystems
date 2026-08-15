@@ -58,21 +58,9 @@
                         </div>
                     </div>
 
-                    <div class="hero-stage" aria-label="Muestra de una experiencia web en computadora y teléfono">
+                    <div class="hero-stage">
                         <div class="hero-stage__halo" aria-hidden="true"></div>
-                        <div class="browser browser--primary">
-                            <div class="browser__bar"><i></i><i></i><i></i><span>xpertsystems / presencia digital</span></div>
-                            <div class="browser__content browser__content--main">
-                                <div class="mock-nav"><b>MARCA</b><em>PROYECTO DIGITAL</em></div>
-                                <div class="mock-hero">
-                                    <small>ESTUDIO / 2026</small>
-                                    <strong><span>Una presencia digital</span><em>a la altura de tu negocio.</em></strong>
-                                    <i></i>
-                                </div>
-                                <div class="mock-footer"><span>DISEÑO A MEDIDA</span><span>RESPONSIVE</span><span>CONVERSIÓN</span></div>
-                            </div>
-                        </div>
-                        <div class="phone"><div class="phone__notch"></div><div class="phone__screen"><span>XS</span><small>RESPONSIVE</small><b>Tu sitio.<br><em>Impecable.</em></b><i>Explorar →</i></div></div>
+                        <img class="hero-stage__image" src="{{ asset('images/hero.png') }}" alt="Sitio web de XpertSystems mostrado en computadora, teléfono y paneles de servicios">
                     </div>
                 </div>
             </section>
@@ -408,12 +396,40 @@
 
         <footer class="footer">
             <div class="container footer__grid">
-                <div><x-brand :light="false" /><p>Desarrollo web para negocios.</p></div>
-                <nav aria-label="Navegación del pie"><b>Explorar</b><a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#paquetes">Paquetes</a><a href="#contacto">Contacto</a></nav>
-                <nav aria-label="Información legal"><b>Información</b><a href="{{ route('privacy') }}">Aviso de privacidad</a><a href="{{ route('terms') }}">Términos</a>@if($contactEmail)<a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>@endif</nav>
-                <div class="footer__cta"><b>¿Hablamos?</b><a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" data-analytics="contact_whatsapp">WhatsApp ↗</a></div>
+                <div class="footer__brand">
+                    <x-brand :light="false" />
+                    <p>Desarrollo web para negocios.</p>
+                </div>
+                <nav class="footer__nav" aria-label="Navegación del pie">
+                    <b>Explorar</b>
+                    <a href="#servicios">Servicios</a>
+                    <a href="#proyectos">Proyectos</a>
+                    <a href="#paquetes">Paquetes</a>
+                    <a href="#contacto">Contacto</a>
+                </nav>
+                <nav class="footer__nav" aria-label="Información legal">
+                    <b>Información</b>
+                    <a href="{{ route('privacy') }}">Aviso de privacidad</a>
+                    <a href="{{ route('terms') }}">Términos</a>
+                    @if($contactEmail)<a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>@endif
+                </nav>
+                <div class="footer__contact">
+                    <span class="footer__contact-eyebrow">¿Hablamos?</span>
+                    <a href="{{ $waFinal }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="footer__contact-link" data-analytics="contact_whatsapp" aria-label="Hablar por WhatsApp">
+                        <svg class="footer__contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                        <span>Hablar por WhatsApp</span>
+                        <span class="footer__contact-arrow">→</span>
+                    </a>
+                    <p class="footer__contact-micro">Escríbenos y te respondemos personalmente.</p>
+                </div>
             </div>
-            <div class="container footer__bottom"><span>© {{ date('Y') }} XpertSystems</span><span>Hecho en México · Para cualquier lugar</span><a href="#inicio">Volver arriba ↑</a></div>
+            <div class="container footer__bottom">
+                <span>© {{ date('Y') }} XpertSystems</span>
+                <span>Hecho en México · Para cualquier lugar</span>
+                <a href="#inicio" class="footer__back-top">Volver arriba <span>↑</span></a>
+            </div>
         </footer>
 
         @if($whatsapp)

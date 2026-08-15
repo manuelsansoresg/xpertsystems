@@ -401,4 +401,32 @@ if (!reduceMotion) {
         }
     }
 
+    // Footer animations
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        const footerGrid = footer.querySelector('.footer__grid');
+        const footerBottom = footer.querySelector('.footer__bottom');
+        const footerColumns = footerGrid ? footerGrid.children : [];
+
+        const footerTl = gsap.timeline({
+            scrollTrigger: { trigger: footer, start: 'top 85%' },
+        });
+
+        // Animate each column with stagger
+        Array.from(footerColumns).forEach((col, i) => {
+            gsap.set(col, { opacity: 0, y: 20 });
+            footerTl.to(col, {
+                opacity: 1, y: 0, duration: 0.6, ease: 'power3.out',
+            }, i * 0.1);
+        });
+
+        // Animate bottom bar
+        if (footerBottom) {
+            gsap.set(footerBottom, { opacity: 0 });
+            footerTl.to(footerBottom, {
+                opacity: 1, duration: 0.7, ease: 'power3.out',
+            }, 0.5);
+        }
+    }
+
 }
