@@ -197,14 +197,97 @@ if (!reduceMotion) {
         }
     }
 
-    gsap.to('.process__timeline', {
-        '--timeline-progress': '100%', ease: 'none',
-        scrollTrigger: { trigger: '.process__timeline', start: 'top 65%', end: 'bottom 65%', scrub: true },
-    });
-    gsap.from('.process-step > div:not(.process-step__number)', {
-        x: 45, opacity: 0, stagger: .15, duration: .8, ease: 'power3.out',
-        scrollTrigger: { trigger: '.process__timeline', start: 'top 75%' },
-    });
+    // Process section animations
+    const processSection = document.querySelector('.process');
+    if (processSection) {
+        const processIntro = processSection.querySelector('.process__intro');
+        const processSteps = processSection.querySelectorAll('.process-step');
+        const progressLine = processSection.querySelector('.process__progress-line');
+
+        // Timeline for intro
+        if (processIntro) {
+            const kicker = processIntro.querySelector('.section-kicker');
+            const heading = processIntro.querySelector('h2');
+            const description = processIntro.querySelector('p');
+
+            const processTl = gsap.timeline({
+                scrollTrigger: { trigger: processSection, start: 'top 75%' },
+            });
+
+            if (kicker) {
+                gsap.set(kicker, { opacity: 0, y: 20 });
+                processTl.to(kicker, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0);
+            }
+
+            if (heading) {
+                gsap.set(heading, { opacity: 0, y: 30 });
+                processTl.to(heading, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.1);
+            }
+
+            if (description) {
+                gsap.set(description, { opacity: 0, y: 20 });
+                processTl.to(description, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.2);
+            }
+
+            // Animate progress line
+            if (progressLine) {
+                gsap.set(progressLine, { '--progress': '0%' });
+                processTl.to(progressLine, {
+                    '--progress': '100%',
+                    duration: 1.2,
+                    ease: 'power2.out',
+                }, 0.3);
+            }
+        }
+
+        // Animate steps with stagger
+        if (processSteps.length > 0) {
+            processSteps.forEach((step, index) => {
+                gsap.set(step, { opacity: 0, y: 30 });
+                gsap.to(step, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'power3.out',
+                    delay: 0.4 + (index * 0.1),
+                    scrollTrigger: {
+                        trigger: step,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none',
+                    },
+                });
+            });
+        }
+
+        // Scroll-based progress line
+        if (progressLine) {
+            gsap.to(progressLine, {
+                '--progress': '100%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: processSection,
+                    start: 'top 60%',
+                    end: 'bottom 40%',
+                    scrub: 1,
+                },
+            });
+        }
+
+        // Active state on scroll
+        if (processSteps.length > 0) {
+            processSteps.forEach((step) => {
+                ScrollTrigger.create({
+                    trigger: step,
+                    start: 'top 60%',
+                    end: 'bottom 40%',
+                    onEnter: () => step.classList.add('is-active'),
+                    onLeave: () => step.classList.remove('is-active'),
+                    onEnterBack: () => step.classList.add('is-active'),
+                    onLeaveBack: () => step.classList.remove('is-active'),
+                });
+            });
+        }
+    }
 
     gsap.from('.faq-item', {
         x: 45, opacity: 0, stagger: .05, duration: .6,

@@ -325,16 +325,25 @@
 
             <section id="proceso" class="process section--light">
                 <div class="container process__grid">
-                    <div class="process__sticky">
+                    <div class="process__intro">
                         <div class="section-kicker"><span>06</span> Así trabajamos</div>
-                        <h2>De la decisión a una página lista para trabajar.</h2>
-                        <p>Un proceso acompañado, sin tecnicismos innecesarios y con claridad en cada etapa.</p>
+                        <h2>De elegir tu paquete<br>a tener <em>tu sitio en línea.</em></h2>
+                        <p>Un proceso acompañado, claro y sin tecnicismos innecesarios.</p>
                     </div>
-                    <ol class="process__timeline">
-                        @foreach([['Eliges tu paquete','Comparas con calma y eliges el alcance que tu negocio necesita.'],['Realizas el anticipo','Reservamos tu proyecto con el 50% del total.'],['Nos compartes la información','Te guiamos para reunir textos, imágenes y datos esenciales.'],['Diseñamos y desarrollamos','Convertimos tu información en una experiencia clara y profesional.'],['Revisamos contigo','Afinamos el resultado contigo antes de publicar.'],['Publicamos','Tu sitio queda en línea con dominio, hosting y SSL.']] as $index => $step)
-                            <li class="process-step"><div class="process-step__number">{{ str_pad($index+1, 2, '0', STR_PAD_LEFT) }}</div><div><h3>{{ $step[0] }}</h3><p>{{ $step[1] }}</p></div><span aria-hidden="true">↘</span></li>
-                        @endforeach
-                    </ol>
+                    <div class="process__timeline-wrapper">
+                        <div class="process__progress-line" aria-hidden="true"></div>
+                        <ol class="process__timeline">
+                            @foreach([['Eliges tu paquete','Comparas opciones y eliges el alcance que tu negocio necesita.'],['Realizas el anticipo','Reservamos tu proyecto con el 50% del total.'],['Nos compartes la información','Te guiamos para reunir textos, imágenes y datos esenciales.'],['Diseñamos y desarrollamos','Convertimos tu información en una experiencia clara y profesional.'],['Revisamos contigo','Afinamos el resultado contigo antes de publicar.'],['Publicamos','Tu sitio queda en línea con dominio, hosting y SSL.']] as $index => $step)
+                                <li class="process-step" data-step="{{ $index + 1 }}">
+                                    <div class="process-step__number">{{ str_pad($index+1, 2, '0', STR_PAD_LEFT) }}</div>
+                                    <div class="process-step__content">
+                                        <h3>{{ $step[0] }}</h3>
+                                        <p>{{ $step[1] }}</p>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ol>
+                    </div>
                 </div>
             </section>
 
