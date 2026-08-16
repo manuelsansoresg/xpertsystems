@@ -13,11 +13,17 @@ class Payment extends Model
     protected $fillable = [
         'order_id', 'provider', 'provider_reference', 'status', 'currency',
         'amount', 'checkout_url', 'paid_at', 'payload',
+        'recorded_by', 'external_event_id', 'payment_type', 'refunded_amount',
     ];
 
     protected function casts(): array
     {
-        return ['amount' => 'decimal:2', 'paid_at' => 'datetime', 'payload' => 'encrypted:array'];
+        return [
+            'amount' => 'decimal:2',
+            'refunded_amount' => 'decimal:2',
+            'paid_at' => 'datetime',
+            'payload' => 'encrypted:array',
+        ];
     }
 
     public function order(): BelongsTo

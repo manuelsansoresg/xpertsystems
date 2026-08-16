@@ -33,6 +33,61 @@ Alpine.data('quoteModal', () => ({
     close() { this.visible = false; document.body.classList.remove('menu-locked'); },
 }));
 
+Alpine.data('sellerForm', () => ({
+    name: '',
+    role: '',
+    init() {
+        const roleSelect = this.$el.querySelector('select[name="role"]');
+        if (roleSelect && roleSelect.value) {
+            this.role = roleSelect.value;
+        }
+    },
+    onRoleChange() {
+    },
+    async generateCode() {
+        const form = this.$el.closest('form');
+        const url = form?.dataset.generateCodeUrl;
+        if (!url) return;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ name: this.name }),
+            });
+            const data = await response.json();
+            if (data.code) {
+                const input = form.querySelector('input[name="referral_code"]');
+                if (input) input.value = data.code;
+            }
+        } catch (e) {
+            console.error('Error generating code', e);
+        }
+    },
+}));
+
+Alpine.data('packageForm', (existingFeatures = []) => ({
+    features: existingFeatures.length > 0 ? existingFeatures : [],
+    renewalEnabled: false,
+    init() {
+        const renewalCheckbox = this.$el.querySelector('input[name="renewal_enabled"]');
+        if (renewalCheckbox && renewalCheckbox.checked) {
+            this.renewalEnabled = true;
+        }
+    },
+    addFeature() {
+        this.features.push({ title: '', visible_summary: false });
+    },
+    removeFeature(index) {
+        this.features.splice(index, 1);
+    },
+    toggleRenewal() {
+    },
+}));
+
 window.Alpine = Alpine;
 Alpine.start();
 

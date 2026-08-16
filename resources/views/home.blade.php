@@ -107,6 +107,10 @@
                     <div class="solution__visual" aria-label="Recorrido de una visita hasta convertirse en contacto">
                         <div class="blueprint-grid" aria-hidden="true"></div>
                         <div class="solution__method">
+                            <header class="method__intro">
+                                <span>El recorrido</span>
+                                <p>De una primera visita a una conversación real.</p>
+                            </header>
                             <ol class="method__timeline">
                                 <li class="method__step">
                                     <span class="method__marker">01</span>
@@ -182,6 +186,9 @@
                 </div>
             </section>
 
+            @php
+                $quotePackage = $packages->firstWhere('requires_quote', true);
+            @endphp
             <section id="paquetes" class="pricing section--cream" x-data="quoteModal">
                 <div class="container">
                     <header class="pricing__header">
@@ -193,23 +200,11 @@
                     <div class="pricing__grid">
                         @foreach($packages as $package)
                             @php
-                                $keyFeatures = match($package->slug) {
-                                    'landing-page' => ['Landing diseñada a medida', 'Diseño responsive', 'Formulario de contacto', 'Botón de WhatsApp', 'SEO básico incluido'],
-                                    'pagina-profesional' => ['Hasta 5 secciones', 'Diseño personalizado', 'Diseño responsive', 'Presentación de servicios', 'Formulario de contacto', 'Optimización inicial para Google'],
-                                    'tienda-en-linea' => ['Diseño personalizado', 'Catálogo administrable', 'Carrito de compras', 'Checkout', 'Pagos en línea', 'SEO básico para tienda y productos'],
-                                    default => array_slice($package->features, 0, 5)
-                                };
-                                $detailFeatures = array_diff($package->features, $keyFeatures);
-
-                                $seoDetails = match($package->slug) {
-                                    'landing-page' => ['Títulos y meta descripción básicos', 'Estructura semántica', 'Preparación para indexación', 'Diseño responsive'],
-                                    'pagina-profesional' => ['Títulos y meta descripciones de páginas principales', 'Estructura semántica', 'URLs limpias cuando corresponda', 'Preparación para indexación', 'Optimización técnica inicial'],
-                                    'tienda-en-linea' => ['Estructura SEO básica de catálogo', 'Títulos y meta básicos', 'Estructura de productos y categorías', 'Diseño responsive', 'Preparación para indexación'],
-                                    default => []
-                                };
+                                $summaryFeatures = $package->featureItems->where('visible_summary', true)->where('active', true);
+                                $detailFeatures = $package->featureItems->where('visible_summary', false)->where('active', true);
                             @endphp
 
-                            <article class="pkg pkg--{{ $package->featured ? 'featured' : ($loop->first ? 'starter' : 'store') }} package-reveal">
+                            <article class="pkg pkg--{{ $package->is_featured ? 'featured' : ($loop->first ? 'starter' : 'store') }} package-reveal">
                                 <div class="pkg__header">
                                     <span class="pkg__number">0{{ $loop->iteration }}</span>
                                     @if($package->badge)<span class="pkg__badge">{{ $package->badge }}</span>@endif
@@ -221,52 +216,57 @@
                                 <div class="pkg__price-block">
                                     <div class="pkg__price">
                                         @if($package->price_type === 'starting_at')<span class="pkg__price-label">Desde</span>@endif
-                                        <strong>${{ number_format((float)$package->price, 0) }}</strong>
-                                        <span class="pkg__currency">MXN</span>
+                                        @if($package->price_type === 'quote')
+                                            <strong>Cotizar</strong>
+                                        @else
+                                            <strong>${{ number_format((float)$package->price, 0) }}</strong>
+                                            <span class="pkg__currency">MXN</span>
+                                        @endif
                                     </div>
-                                    @if($package->direct_checkout)
+                                    @if($package->direct_checkout && $package->price_type !== 'quote')
                                         <div class="pkg__payment">
                                             <div><span>Anticipo</span><b>${{ number_format($package->deposit_amount, 0) }}</b></div>
                                             <div><span>Al finalizar</span><b>${{ number_format((float)$package->price - $package->deposit_amount, 0) }}</b></div>
                                         </div>
                                     @endif
+                                    @if($package->renewal_enabled && $package->show_renewal_price)
+                                        <div class="pkg__renewal">
+                                            <span>Renovación anual</span><b>${{ number_format((float)$package->renewal_price, 0) }}</b>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 <ul class="pkg__features">
-                                    @foreach($keyFeatures as $feature)<li><span>✓</span>{{ $feature }}</li>@endforeach
+                                    @foreach($summaryFeatures as $feature)<li><span>✓</span>{{ $feature->title }}</li>@endforeach
                                 </ul>
 
-                                @if(count($detailFeatures) > 0 || count($seoDetails) > 0)
+                                @if($detailFeatures->isNotEmpty())
                                     <div class="pkg__details" x-data="{ open: false }">
                                         <button type="button" class="pkg__details-toggle" @click="open = !open" :aria-expanded="open">
                                             <span x-text="open ? 'Ver menos' : 'Ver detalles'"></span>
                                             <i x-text="open ? '−' : '+'"></i>
                                         </button>
                                         <div x-show="open" x-collapse>
-                                            @if(count($detailFeatures) > 0)
-                                                <ul class="pkg__details-list">
-                                                    @foreach($detailFeatures as $feature)<li><span>✓</span>{{ $feature }}</li>@endforeach
-                                                </ul>
-                                            @endif
-                                            @if(count($seoDetails) > 0)
-                                                <div class="pkg__seo-details">
-                                                    <span class="pkg__seo-label">SEO y Google:</span>
-                                                    <ul class="pkg__details-list">
-                                                        @foreach($seoDetails as $detail)<li><span>✓</span>{{ $detail }}</li>@endforeach
-                                                    </ul>
-                                                </div>
-                                            @endif
+                                            <ul class="pkg__details-list">
+                                                @foreach($detailFeatures as $feature)<li><span>✓</span>{{ $feature->title }}</li>@endforeach
+                                            </ul>
                                         </div>
                                     </div>
                                 @endif
 
-                                @if($package->note)<p class="pkg__note">{{ $package->note }}</p>@endif
+                                @if($package->renewal_enabled && $package->renewal_public_text)
+                                    <p class="pkg__note">{{ $package->renewal_public_text }}</p>
+                                @elseif($package->note)
+                                    <p class="pkg__note">{{ $package->note }}</p>
+                                @endif
 
                                 <div class="pkg__action">
-                                    @if($package->direct_checkout)
-                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Elegir {{ $package->featured ? 'Profesional' : 'Landing' }} <span>→</span></a>
+                                    @if($package->requires_quote)
+                                        <button type="button" @click="open({{ $package->id }})" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Cotizar <span>→</span></button>
+                                    @elseif($package->direct_checkout)
+                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></a>
                                     @else
-                                        <button type="button" @click="open({{ $package->id }})" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Cotizar tienda <span>→</span></button>
+                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></a>
                                     @endif
                                 </div>
                             </article>
@@ -290,6 +290,7 @@
                     </div>
                 </div>
 
+                @if($quotePackage)
                 <div class="modal" x-cloak x-show="visible" x-transition.opacity @keydown.escape.window="close" role="dialog" aria-modal="true" aria-labelledby="quote-title">
                     <button class="modal__backdrop" @click="close" aria-label="Cerrar cotización"></button>
                     <div class="modal__panel" x-show="visible" x-transition>
@@ -297,7 +298,7 @@
                         <div class="section-kicker"><span>TIENDA</span> Cotización personalizada</div>
                         <h2 id="quote-title">Cuéntanos qué quieres vender.</h2>
                         <p>Revisamos tus productos, envíos e integraciones antes de darte una cifra definitiva.</p>
-                        <form method="POST" action="{{ route('quote.store', $packages->firstWhere('requires_quote', true)) }}" class="quote-form">
+                        <form method="POST" action="{{ route('quote.store', $quotePackage) }}" class="quote-form">
                             @csrf
                             <div class="honeypot" aria-hidden="true"><label>Tu sitio web<input name="website" tabindex="-1" autocomplete="off"></label></div>
                             <label><span>Nombre</span><input name="name" required maxlength="100" autocomplete="name"></label>
@@ -309,6 +310,7 @@
                         </form>
                     </div>
                 </div>
+                @endif
             </section>
 
             <section id="proceso" class="process section--light">
