@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'seller_id');
     }
 
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'seller_id');
+    }
+
     public function hasRole(string $role): bool
     {
         return $this->roles->contains('slug', $role);

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\CommissionController as AdminCommissionController;
+use App\Http\Controllers\Admin\CouponController as AdminCouponController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PayoutController as AdminPayoutController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\Seller\CouponController as SellerCouponController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WebhookController;
@@ -73,10 +76,28 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
             Route::get('/packages/{package}/edit', [AdminPackageController::class, 'edit'])->name('packages.edit');
             Route::put('/packages/{package}', [AdminPackageController::class, 'update'])->name('packages.update');
             Route::patch('/packages/{package}/toggle', [AdminPackageController::class, 'toggleActive'])->name('packages.toggle');
+
+            Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
+            Route::get('/customers/create', [AdminCustomerController::class, 'create'])->name('customers.create');
+            Route::post('/customers', [AdminCustomerController::class, 'store'])->name('customers.store');
+            Route::get('/customers/{customer}', [AdminCustomerController::class, 'show'])->name('customers.show');
+            Route::get('/customers/{customer}/edit', [AdminCustomerController::class, 'edit'])->name('customers.edit');
+            Route::put('/customers/{customer}', [AdminCustomerController::class, 'update'])->name('customers.update');
+            Route::patch('/customers/{customer}/toggle', [AdminCustomerController::class, 'toggleStatus'])->name('customers.toggle');
+
+            Route::get('/coupons', [AdminCouponController::class, 'index'])->name('coupons.index');
+            Route::get('/coupons/create', [AdminCouponController::class, 'create'])->name('coupons.create');
+            Route::post('/coupons', [AdminCouponController::class, 'store'])->name('coupons.store');
+            Route::get('/coupons/{coupon}', [AdminCouponController::class, 'show'])->name('coupons.show');
+            Route::get('/coupons/{coupon}/edit', [AdminCouponController::class, 'edit'])->name('coupons.edit');
+            Route::put('/coupons/{coupon}', [AdminCouponController::class, 'update'])->name('coupons.update');
+            Route::patch('/coupons/{coupon}/toggle', [AdminCouponController::class, 'toggle'])->name('coupons.toggle');
+            Route::post('/coupons/{coupon}/duplicate', [AdminCouponController::class, 'duplicate'])->name('coupons.duplicate');
         });
     });
 });
 
 Route::prefix('seller')->name('seller.')->middleware(['auth', 'internal', 'role:seller'])->group(function (): void {
     Route::get('/', SellerDashboardController::class)->name('dashboard');
+    Route::get('/coupons', [SellerCouponController::class, 'index'])->name('coupons.index');
 });

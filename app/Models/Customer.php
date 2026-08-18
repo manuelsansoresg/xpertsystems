@@ -15,7 +15,7 @@ final class Customer extends Model
 
     protected $fillable = [
         'seller_id', 'first_name', 'last_name', 'business_name', 'email', 'phone',
-        'country', 'currency', 'referral_code', 'source', 'notes',
+        'country', 'currency', 'referral_code', 'source', 'status', 'notes',
         'first_purchase_at', 'last_purchase_at',
     ];
 
@@ -35,5 +35,15 @@ final class Customer extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function getSalesCountAttribute(): int
+    {
+        return $this->orders()->where('status', 'completed')->count();
+    }
+
+    public function getSalesSumTotalAttribute(): float
+    {
+        return (float) $this->orders()->where('status', 'completed')->sum('total_amount');
     }
 }

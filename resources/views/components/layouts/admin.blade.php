@@ -55,12 +55,18 @@
 
                     <span class="admin-nav__label">Comercial</span>
                     <span class="admin-nav__pending"><i></i>Ventas<small>Próxima fase</small></span>
-                    <span class="admin-nav__pending"><i></i>Clientes<small>Próxima fase</small></span>
+                    <a href="{{ route('admin.customers.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.customers') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.customers')) aria-current="page" @endif>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z"/></svg>
+                        <span>Clientes</span>
+                    </a>
                     <a href="{{ route('admin.packages.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.packages') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.packages')) aria-current="page" @endif>
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2Zm-6 0h-4V4h4v2Z"/></svg>
                         <span>Paquetes</span>
                     </a>
-                    <span class="admin-nav__pending"><i></i>Cupones<small>Próxima fase</small></span>
+                    <a href="{{ route('admin.coupons.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.coupons') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.coupons')) aria-current="page" @endif>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                        <span>Cupones</span>
+                    </a>
 
                     <span class="admin-nav__label">Sistema</span>
                     <a href="{{ route('admin.users.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.users') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.users')) aria-current="page" @endif>
@@ -71,9 +77,14 @@
                     <span class="admin-nav__pending"><i></i>Configuración<small>Próxima fase</small></span>
                 @else
                     <span class="admin-nav__label">Mi espacio</span>
-                    @foreach(['Mis ventas', 'Mis clientes', 'Mis cupones', 'Mis comisiones', 'Mis pagos'] as $item)
-                        <span class="admin-nav__pending"><i></i>{{ $item }}<small>Próxima fase</small></span>
-                    @endforeach
+                    <span class="admin-nav__pending"><i></i>Mis ventas<small>Próxima fase</small></span>
+                    <span class="admin-nav__pending"><i></i>Mis clientes<small>Próxima fase</small></span>
+                    <a href="{{ route('seller.coupons.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'seller.coupons') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'seller.coupons')) aria-current="page" @endif>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                        <span>Mis cupones</span>
+                    </a>
+                    <span class="admin-nav__pending"><i></i>Mis comisiones<small>Próxima fase</small></span>
+                    <span class="admin-nav__pending"><i></i>Mis pagos<small>Próxima fase</small></span>
                 @endif
             </nav>
 

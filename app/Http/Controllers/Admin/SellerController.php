@@ -50,7 +50,7 @@ final class SellerController extends Controller
 
         $sellers->each(function (User $seller): void {
             $seller->setAttribute('orders_count', Order::query()->where('seller_id', $seller->id)->count());
-            $seller->setAttribute('customers_count', Order::query()->where('seller_id', $seller->id)->whereNotNull('customer_id')->distinct('customer_id')->count('customer_id'));
+            $seller->setAttribute('customers_count', \App\Models\Customer::query()->where('seller_id', $seller->id)->count());
             $seller->setAttribute('sales_sum', (float) Order::query()->where('seller_id', $seller->id)->sum('total_amount'));
             $seller->setAttribute('commissions_sum', (float) Commission::query()->where('seller_id', $seller->id)->sum('commission_amount'));
         });
@@ -73,6 +73,13 @@ final class SellerController extends Controller
 
         $sellerId = $seller->user_id;
 
+        $coupons = \App\Models\Coupon::query()
+            ->with('packages')
+            ->where('seller_id', $sellerId)
+            ->latest()
+            ->take(10)
+            ->get();
+
         return view('admin.sellers.show', [
             'seller' => $seller,
             'referralUrl' => route('home', ['ref' => $seller->referral_code]),
@@ -82,6 +89,7 @@ final class SellerController extends Controller
                 'sales_sum' => (float) Order::query()->where('seller_id', $sellerId)->sum('total_amount'),
                 'commissions_sum' => (float) Commission::query()->where('seller_id', $sellerId)->sum('commission_amount'),
             ],
+            'coupons' => $coupons,
         ]);
     }
 

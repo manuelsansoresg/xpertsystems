@@ -223,10 +223,9 @@
                                             <span class="pkg__currency">MXN</span>
                                         @endif
                                     </div>
-                                    @if($package->direct_checkout && $package->price_type !== 'quote')
-                                        <div class="pkg__payment">
-                                            <div><span>Anticipo</span><b>${{ number_format($package->deposit_amount, 0) }}</b></div>
-                                            <div><span>Al finalizar</span><b>${{ number_format((float)$package->price - $package->deposit_amount, 0) }}</b></div>
+                                    @if($package->price_type !== 'quote' && $package->direct_checkout)
+                                        <div class="pkg__payment-type">
+                                            <span>PAGO ÚNICO</span>
                                         </div>
                                     @endif
                                     @if($package->renewal_enabled && $package->show_renewal_price)
@@ -323,7 +322,7 @@
                     <div class="process__timeline-wrapper">
                         <div class="process__progress-line" aria-hidden="true"></div>
                         <ol class="process__timeline">
-                            @foreach([['Eliges tu paquete','Comparas opciones y eliges el alcance que tu negocio necesita.'],['Realizas el anticipo','Reservamos tu proyecto con el 50% del total.'],['Nos compartes la información','Te guiamos para reunir textos, imágenes y datos esenciales.'],['Diseñamos y desarrollamos','Convertimos tu información en una experiencia clara y profesional.'],['Revisamos contigo','Afinamos el resultado contigo antes de publicar.'],['Publicamos','Tu sitio queda en línea con dominio, hosting y SSL.']] as $index => $step)
+                            @foreach([['Eliges tu paquete','Comparas opciones y eliges la que mejor se adapta a tu negocio.'],['Realizas tu pago','Confirmas tu paquete mediante un único pago.'],['Nos compartes la información','Te guiamos para reunir textos, imágenes y datos esenciales.'],['Diseñamos y desarrollamos','Convertimos tu información en una experiencia profesional.'],['Revisamos contigo','Afinamos el resultado antes de publicar.'],['Publicamos','Tu sitio queda en línea con los servicios incluidos.']] as $index => $step)
                                 <li class="process-step" data-step="{{ $index + 1 }}">
                                     <div class="process-step__number">{{ str_pad($index+1, 2, '0', STR_PAD_LEFT) }}</div>
                                     <div class="process-step__content">
@@ -350,7 +349,7 @@
                             ['¿Qué incluyen dominio, hosting y SSL?','Los paquetes incluyen dominio .com, hosting y certificado SSL durante el primer año. Si ya tienes dominio o alojamiento, podemos revisar cómo aprovecharlos. Después del primer año podemos ayudarte con la renovación correspondiente.'],
                             ['¿Cuánto tarda mi página?','El tiempo depende del paquete y de qué tan rápido tengamos el contenido necesario. Una landing sencilla puede estar lista en pocos días; proyectos más grandes requieren más tiempo. Antes de comenzar te indicamos un plazo aproximado.'],
                             ['¿Puedo solicitar cambios?','Sí. Durante el desarrollo revisamos el proyecto contigo antes de publicarlo. Los ajustes dentro del alcance contratado se revisan durante esta etapa. Cambios adicionales o nuevas funciones pueden cotizarse por separado.'],
-                            ['¿Cómo funciona el anticipo?','Para comenzar solicitamos el 50% del proyecto. El resto se paga al finalizar, cuando el sitio esté aprobado y listo para publicarse.'],
+                            ['¿Cómo funciona el pago?','Los paquetes estándar se contratan mediante un solo pago. Una vez confirmado, comenzamos el proceso de desarrollo. Los proyectos especiales o personalizados pueden manejar condiciones distintas según su alcance.'],
                             ['¿Puedo contratar si estoy fuera de México?','Sí. Podemos trabajar con clientes de otros países de forma remota. Para México manejamos las opciones de pago disponibles localmente y para clientes internacionales podemos utilizar métodos como PayPal según corresponda.'],
                             ['¿Cómo funciona una tienda en línea y podré administrarla?','Incluimos la configuración inicial y la carga acordada de productos. Después podrás administrar el catálogo y agregar nuevos productos desde tu panel. El alcance inicial depende de la cantidad de productos, variantes e integraciones que necesites.'],
                         ])

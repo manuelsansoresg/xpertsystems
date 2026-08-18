@@ -1,6 +1,6 @@
 <x-layouts.app
     :title="'Contratar '.$package->name.' — XpertSystems'"
-    description="Completa tus datos y paga el anticipo para comenzar tu proyecto con XpertSystems."
+    description="Completa tus datos y realiza el pago único para comenzar tu proyecto con XpertSystems."
 >
     @php($waUrl = $whatsapp ? 'https://wa.me/'.$whatsapp.'?text='.rawurlencode("Hola, vi el paquete {$package->name} de XpertSystems y quisiera resolver una duda antes de contratar.") : route('home').'#contacto')
     <div class="checkout-page">
@@ -32,16 +32,17 @@
                         <label class="terms-check"><input name="terms" type="checkbox" value="1" required {{ old('terms') ? 'checked' : '' }}><span>Acepto el <a href="{{ route('privacy') }}" target="_blank">aviso de privacidad</a> y los <a href="{{ route('terms') }}" target="_blank">términos del servicio</a>.</span></label>
                         @error('terms')<small class="form-error">{{ $message }}</small>@enderror
                         <div class="checkout-submit">
-                            <button type="submit" class="button button--gold button--full" data-analytics="begin_checkout" data-package="{{ $package->slug }}">Pagar anticipo <span>→</span></button>
+                            <button type="submit" class="button button--gold button--full" data-analytics="begin_checkout" data-package="{{ $package->slug }}">Pagar ahora <span>→</span></button>
                             <a class="order-summary__help" href="{{ $waUrl }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" data-analytics="contact_whatsapp">¿Tienes dudas? Hablar por WhatsApp ↗</a>
                         </div>
                     </form>
                     <aside class="order-summary" aria-label="Resumen de la orden">
                         <span class="order-summary__eyebrow">Resumen del proyecto</span>
                         <h2>{{ $package->name }}</h2>
-                        <div class="summary-row"><span>Precio total</span><strong>${{ number_format((float)$package->price, 0) }} MXN</strong></div>
-                        <div class="summary-row summary-row--deposit"><span>Anticipo hoy</span><strong>${{ number_format($package->deposit_amount, 0) }} MXN</strong></div>
-                        <div class="summary-row"><span>Pendiente al finalizar</span><strong>${{ number_format((float)$package->price - $package->deposit_amount, 0) }} MXN</strong></div>
+                        <div class="summary-row"><span>Pago único</span><strong>${{ number_format((float)$package->price, 0) }} MXN</strong></div>
+                        @if($package->renewal_enabled && $package->renewal_price)
+                        <div class="summary-row"><span>Renovación anual</span><strong>${{ number_format((float)$package->renewal_price, 0) }} MXN</strong></div>
+                        @endif
                         <p class="order-summary__note">El monto se calcula en nuestro servidor. No almacenamos datos de tarjeta: el pago se completa en Mercado Pago o PayPal, según tu país.</p>
                     </aside>
                 </div>

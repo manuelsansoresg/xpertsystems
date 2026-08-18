@@ -80,11 +80,11 @@ class CheckoutTest extends TestCase
             'status' => OrderStatus::AwaitingPayment, 'customer_name' => 'Ana',
             'customer_email' => 'ana@example.com', 'customer_whatsapp' => '5219991234567',
             'country' => 'OTHER', 'business_name' => 'Ana Studio', 'currency' => 'MXN',
-            'total_amount' => 2700, 'deposit_amount' => 1350, 'balance_amount' => 1350,
+            'total_amount' => 2700, 'deposit_amount' => 2700, 'balance_amount' => 0,
         ]);
         $order->payments()->create([
             'provider' => 'paypal', 'provider_reference' => 'PAYPAL-ORDER-1',
-            'status' => 'pending', 'currency' => 'MXN', 'amount' => 1350,
+            'status' => 'pending', 'currency' => 'MXN', 'amount' => 2700,
         ]);
         Http::fake([
             'api-m.sandbox.paypal.com/v1/oauth2/token' => Http::response(['access_token' => 'access']),
@@ -93,14 +93,14 @@ class CheckoutTest extends TestCase
                     'custom_id' => 'XS-TEST-PAYPAL',
                     'payments' => ['captures' => [[
                         'id' => 'CAPTURE-1', 'status' => 'COMPLETED',
-                        'amount' => ['currency_code' => 'MXN', 'value' => '1350.00'],
+                        'amount' => ['currency_code' => 'MXN', 'value' => '2700.00'],
                     ]]],
                 ]],
             ]),
         ]);
 
         $this->get(route('checkout.return', ['order' => $order->reference, 'token' => 'PAYPAL-ORDER-1']))
-            ->assertOk()->assertSee('Anticipo confirmado');
+            ->assertOk()->assertSee('Pago confirmado');
 
         $this->assertSame(OrderStatus::DepositPaid, $order->refresh()->status);
     }

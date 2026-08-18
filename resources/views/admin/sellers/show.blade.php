@@ -126,5 +126,65 @@
             </div>
         </section>
         @endif
+
+        <section class="admin-panel admin-panel--full">
+            <header class="admin-panel__header">
+                <div>
+                    <span>Cupones</span>
+                    <h2>Cupones asignados</h2>
+                </div>
+                <a href="{{ route('admin.coupons.create', ['seller_id' => $seller->user_id]) }}" class="admin-btn admin-btn--ghost" style="font-size:.75rem;padding:.35rem .7rem">
+                    + Crear cupón
+                </a>
+            </header>
+            <div class="admin-panel__body">
+                @if($coupons->isEmpty())
+                    <div class="admin-empty-state" style="min-height:100px">
+                        <span>XS</span>
+                        <div><h3>Sin cupones asignados</h3><p>Este vendedor no tiene cupones asignados.</p></div>
+                    </div>
+                @else
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Descuento</th>
+                                    <th>Paquetes</th>
+                                    <th>Usos</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($coupons as $coupon)
+                                    <tr>
+                                        <td data-label="Código"><code class="admin-code">{{ $coupon->code }}</code></td>
+                                        <td data-label="Descuento"><strong>{{ $coupon->discountDisplay() }}</strong></td>
+                                        <td data-label="Paquetes">
+                                            @if($coupon->scope === \App\Enums\CouponScope::Global)
+                                                <span class="admin-tag">Todos</span>
+                                            @else
+                                                <span class="admin-tag">{{ $coupon->packages->count() }} paquete(s)</span>
+                                            @endif
+                                        </td>
+                                        <td data-label="Usos">{{ $coupon->times_used }}{{ $coupon->usage_limit ? '/' . $coupon->usage_limit : '' }}</td>
+                                        <td data-label="Estado">
+                                            <span class="admin-status admin-status--{{ $coupon->statusColor() }}">{{ $coupon->statusLabel() }}</span>
+                                        </td>
+                                        <td data-label="">
+                                            <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-actions__btn" title="Ver">👁</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:.75rem;text-align:right">
+                        <a href="{{ route('admin.coupons.index', ['seller_id' => $seller->user_id]) }}" class="admin-link-small">Ver todos los cupones →</a>
+                    </div>
+                @endif
+            </div>
+        </section>
     </div>
 </x-layouts.admin>
