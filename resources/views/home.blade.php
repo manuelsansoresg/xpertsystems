@@ -228,11 +228,7 @@
                                             <span>PAGO ÚNICO</span>
                                         </div>
                                     @endif
-                                    @if($package->renewal_enabled && $package->show_renewal_price)
-                                        <div class="pkg__renewal">
-                                            <span>Renovación anual</span><b>${{ number_format((float)$package->renewal_price, 0) }}</b>
-                                        </div>
-                                    @endif
+                                    
                                 </div>
 
                                 <ul class="pkg__features">
