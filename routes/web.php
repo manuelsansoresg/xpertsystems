@@ -23,7 +23,14 @@ Route::get('/', LandingController::class)->name('home');
 Route::get('/contratar/{package:slug}', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/contratar/{package:slug}', [CheckoutController::class, 'store'])
     ->middleware('throttle:6,1')->name('checkout.store');
-Route::get('/pago/confirmacion/{order}', [CheckoutController::class, 'returned'])->name('checkout.return');
+Route::get('/pago/{order}/exitoso', [CheckoutController::class, 'paymentResult'])
+    ->defaults('result', 'success')->name('checkout.payment.success');
+Route::get('/pago/{order}/pendiente', [CheckoutController::class, 'paymentResult'])
+    ->defaults('result', 'pending')->name('checkout.payment.pending');
+Route::get('/pago/{order}/no-completado', [CheckoutController::class, 'paymentResult'])
+    ->defaults('result', 'failure')->name('checkout.payment.failure');
+Route::get('/pago/confirmacion/{order}', fn (string $order) => redirect()->route('checkout.payment.pending', $order))
+    ->name('checkout.return');
 Route::post('/cotizar/{package:slug}', [QuoteController::class, 'store'])
     ->middleware('throttle:5,1')->name('quote.store');
 

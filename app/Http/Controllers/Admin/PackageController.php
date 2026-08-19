@@ -10,7 +10,6 @@ use App\Http\Requests\UpdatePackageRequest;
 use App\Models\Package;
 use App\Models\PackageFeature;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -45,7 +44,7 @@ final class PackageController extends Controller
             'price_type' => $request->validated('price_type'),
             'direct_checkout' => $request->boolean('direct_checkout'),
             'requires_quote' => $request->boolean('requires_quote'),
-            'deposit_percentage' => $request->validated('deposit_percentage'),
+            'deposit_percentage' => $request->boolean('direct_checkout') ? 100 : null,
             'featured' => $request->boolean('featured'),
             'is_featured' => $request->boolean('is_featured'),
             'badge' => $request->validated('badge'),
@@ -92,7 +91,7 @@ final class PackageController extends Controller
             'price_type' => $request->validated('price_type'),
             'direct_checkout' => $request->boolean('direct_checkout'),
             'requires_quote' => $request->boolean('requires_quote'),
-            'deposit_percentage' => $request->validated('deposit_percentage'),
+            'deposit_percentage' => $request->boolean('direct_checkout') ? 100 : null,
             'featured' => $request->boolean('featured'),
             'is_featured' => $request->boolean('is_featured'),
             'badge' => $request->validated('badge'),

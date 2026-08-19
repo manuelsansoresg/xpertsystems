@@ -8,8 +8,8 @@ use App\Models\Lead;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\Setting;
+use App\Services\Payments\MercadoPagoPaymentService;
 use App\Services\Payments\PaymentServiceResolver;
-use App\Services\Payments\PayPalPaymentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +47,6 @@ class CheckoutController extends Controller
             ]);
 
             $total = (float) $package->price;
-            $deposit = round($total * ((int) $package->deposit_percentage / 100), 2);
 
             return Order::create([
                 'reference' => 'XS-'.now()->format('ymd').'-'.Str::upper(Str::random(8)),
@@ -56,8 +55,8 @@ class CheckoutController extends Controller
                 'customer_name' => $data['name'], 'customer_email' => $data['email'],
                 'customer_whatsapp' => $data['whatsapp'], 'country' => $data['country'],
                 'business_name' => $data['business_name'], 'currency' => $package->currency,
-                'total_amount' => $total, 'deposit_amount' => $deposit,
-                'balance_amount' => $total - $deposit,
+                'total_amount' => $total, 'deposit_amount' => $total,
+                'balance_amount' => 0,
             ]);
         });
 
@@ -78,20 +77,35 @@ class CheckoutController extends Controller
         }
     }
 
-    public function returned(Request $request, string $order, PayPalPaymentService $payPal): View
-    {
+    public function paymentResult(
+        Request $request,
+        string $order,
+        string $result,
+        MercadoPagoPaymentService $mercadoPago,
+    ): View {
         $order = Order::query()->where('reference', $order)->with(['package', 'payments'])->firstOrFail();
 
-        if ($request->filled('token') && $order->status === OrderStatus::AwaitingPayment) {
+        if ($request->filled('payment_id') && ! in_array($order->status, [OrderStatus::Paid, OrderStatus::DepositPaid], true)) {
             try {
-                $payPal->capture($order, (string) $request->query('token'));
+                $mercadoPago->synchronizePayment($order, (string) $request->query('payment_id'));
                 $order->refresh()->load(['package', 'payments']);
             } catch (Throwable $exception) {
                 report($exception);
             }
         }
 
-        return view('checkout.return', ['order' => $order, 'whatsapp' => $this->whatsapp()]);
+        $state = match (true) {
+            in_array($order->status, [OrderStatus::Paid, OrderStatus::DepositPaid], true) => 'success',
+            in_array($order->payment_status, ['rejected', 'cancelled', 'refunded', 'charged_back'], true) => 'failure',
+            $result === 'failure' => 'failure',
+            default => 'pending',
+        };
+
+        return view('checkout.return', [
+            'order' => $order,
+            'state' => $state,
+            'whatsapp' => $this->whatsapp(),
+        ]);
     }
 
     private function whatsapp(): string

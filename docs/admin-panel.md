@@ -36,7 +36,7 @@ Las reglas futuras respetarán esta prioridad:
 3. paquete;
 4. configuración global.
 
-Cada comisión conserva tipo, valor y base de cálculo como snapshot. La tabla permite una comisión por pago confirmado para soportar anticipos proporcionales e idempotencia.
+Cada comisión conserva tipo, valor y base de cálculo como snapshot. La tabla permite una comisión por pago confirmado y mantiene idempotencia.
 
 ### Atribución
 

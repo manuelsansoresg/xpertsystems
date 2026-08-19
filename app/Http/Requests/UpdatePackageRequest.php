@@ -26,7 +26,6 @@ final class UpdatePackageRequest extends FormRequest
             'price_type' => ['required', Rule::in(['fixed', 'starting_at', 'quote'])],
             'direct_checkout' => ['nullable', 'boolean'],
             'requires_quote' => ['nullable', 'boolean'],
-            'deposit_percentage' => ['nullable', 'integer', 'min:0', 'max:100'],
             'featured' => ['nullable', 'boolean'],
             'is_featured' => ['nullable', 'boolean'],
             'badge' => ['nullable', 'string', 'max:120'],

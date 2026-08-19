@@ -67,7 +67,7 @@ class Package extends Model
     public function getDepositAmountAttribute(): ?float
     {
         return $this->direct_checkout
-            ? round((float) $this->price * ((int) $this->deposit_percentage / 100), 2)
+            ? (float) $this->price
             : null;
     }
 

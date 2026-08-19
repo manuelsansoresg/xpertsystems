@@ -126,6 +126,7 @@
 .admin-status { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .5rem; background: rgba(75, 130, 155, .1); color: #315e73; font-size: .5rem; text-transform: uppercase; letter-spacing: .05em; }
 .admin-status::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 .admin-status--deposit-paid,
+.admin-status--paid,
 .admin-status--completed { background: rgba(47, 118, 95, .1); color: var(--admin-green); }
 .admin-status--cancelled { background: rgba(169, 74, 66, .1); color: var(--admin-red); }
 .admin-status--awaiting-payment,

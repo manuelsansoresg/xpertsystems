@@ -79,7 +79,7 @@ final class AdminDashboardTest extends TestCase
             'subtotal_amount' => $package->price,
             'total_amount' => $package->price,
             'deposit_amount' => $package->deposit_amount ?? 0,
-            'balance_amount' => $package->price,
+            'balance_amount' => $package->direct_checkout ? 0 : $package->price,
         ]);
     }
 }

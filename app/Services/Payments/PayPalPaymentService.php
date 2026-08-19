@@ -3,6 +3,7 @@
 namespace App\Services\Payments;
 
 use App\Contracts\PaymentServiceInterface;
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Http;
@@ -24,7 +25,7 @@ class PayPalPaymentService implements PaymentServiceInterface
 
         $payment = $order->payments()->create([
             'provider' => 'paypal', 'status' => 'pending', 'currency' => $order->currency,
-            'amount' => $order->deposit_amount,
+            'payment_type' => 'full', 'amount' => $order->total_amount,
         ]);
 
         $response = Http::withToken($accessToken)->acceptJson()
@@ -35,8 +36,8 @@ class PayPalPaymentService implements PaymentServiceInterface
                     'reference_id' => $order->reference,
                     'custom_id' => $order->reference,
                     'invoice_id' => $order->reference,
-                    'description' => "Anticipo · {$order->package->name}",
-                    'amount' => ['currency_code' => $order->currency, 'value' => number_format((float) $order->deposit_amount, 2, '.', '')],
+                    'description' => "Plan {$order->package->name} · primer año",
+                    'amount' => ['currency_code' => $order->currency, 'value' => number_format((float) $order->total_amount, 2, '.', '')],
                 ]],
                 'payment_source' => ['paypal' => ['experience_context' => [
                     'brand_name' => 'XpertSystems', 'shipping_preference' => 'NO_SHIPPING',
@@ -75,7 +76,7 @@ class PayPalPaymentService implements PaymentServiceInterface
 
         if (
             ! hash_equals($order->reference, (string) $reference)
-            || ! hash_equals(number_format((float) $order->deposit_amount, 2, '.', ''), number_format((float) $amount, 2, '.', ''))
+            || ! hash_equals(number_format((float) $order->total_amount, 2, '.', ''), number_format((float) $amount, 2, '.', ''))
             || $currency !== $order->currency
             || ($capture['status'] ?? null) !== 'COMPLETED'
         ) {
@@ -83,7 +84,7 @@ class PayPalPaymentService implements PaymentServiceInterface
         }
 
         $payment->update(['status' => 'completed', 'paid_at' => now(), 'payload' => $response]);
-        $order->update(['status' => \App\Enums\OrderStatus::DepositPaid]);
+        $order->update(['status' => OrderStatus::Paid]);
 
         return $payment->refresh();
     }
