@@ -41,7 +41,7 @@ class CheckoutController extends Controller
         $order = DB::transaction(function () use ($data, $package, $request) {
             $lead = Lead::create([
                 'name' => $data['name'], 'email' => $data['email'], 'whatsapp' => $data['whatsapp'],
-                'country' => $data['country'], 'business_name' => $data['business_name'],
+                'country' => $data['country'], 'business_name' => $data['business_name'] ?? null,
                 'package_id' => $package->id, 'source' => 'checkout',
                 'metadata' => ['referrer' => $request->headers->get('referer')],
             ]);
@@ -54,7 +54,7 @@ class CheckoutController extends Controller
                 'status' => OrderStatus::AwaitingPayment,
                 'customer_name' => $data['name'], 'customer_email' => $data['email'],
                 'customer_whatsapp' => $data['whatsapp'], 'country' => $data['country'],
-                'business_name' => $data['business_name'], 'currency' => $package->currency,
+                'business_name' => $data['business_name'] ?? null, 'currency' => $package->currency,
                 'total_amount' => $total, 'deposit_amount' => $total,
                 'balance_amount' => 0,
             ]);

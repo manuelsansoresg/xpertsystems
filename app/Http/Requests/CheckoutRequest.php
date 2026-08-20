@@ -26,7 +26,7 @@ class CheckoutRequest extends FormRequest
             'email' => ['required', 'email:rfc', 'max:160'],
             'whatsapp' => ['required', 'string', 'regex:/^[0-9+()\-\s]{8,24}$/'],
             'country' => ['required', Rule::in(['MX'])],
-            'business_name' => ['required', 'string', 'min:2', 'max:140'],
+            'business_name' => ['nullable', 'string', 'min:2', 'max:140'],
             'website' => ['nullable', 'prohibited'],
             'terms' => ['accepted'],
         ];

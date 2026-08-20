@@ -51,6 +51,36 @@ class CheckoutTest extends TestCase
         });
     }
 
+    public function test_checkout_can_proceed_without_a_business_name(): void
+    {
+        config(['services.mercado_pago.access_token' => 'test-token']);
+        Http::fake([
+            'api.mercadopago.com/checkout/preferences' => Http::response([
+                'id' => 'pref-without-business',
+                'sandbox_init_point' => 'https://sandbox.mercadopago.com/checkout/pref-without-business',
+            ]),
+        ]);
+        $package = Package::where('slug', 'landing-page')->firstOrFail();
+
+        $response = $this->post(route('checkout.store', $package), [
+            'name' => 'María López',
+            'email' => 'maria@example.com',
+            'whatsapp' => '+52 999 123 4567',
+            'country' => 'MX',
+            'terms' => '1',
+        ]);
+
+        $response->assertRedirect('https://sandbox.mercadopago.com/checkout/pref-without-business');
+        $this->assertDatabaseHas('leads', [
+            'email' => 'maria@example.com',
+            'business_name' => null,
+        ]);
+        $this->assertDatabaseHas('orders', [
+            'customer_email' => 'maria@example.com',
+            'business_name' => null,
+        ]);
+    }
+
     public function test_store_package_cannot_enter_direct_checkout(): void
     {
         $package = Package::where('slug', 'tienda-en-linea')->firstOrFail();

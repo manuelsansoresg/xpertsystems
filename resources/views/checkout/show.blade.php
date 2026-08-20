@@ -20,7 +20,7 @@
                         <label><span>Nombre completo</span><input name="name" value="{{ old('name') }}" required maxlength="100" autocomplete="name">@error('name')<small class="form-error">{{ $message }}</small>@enderror</label>
                         <label><span>Correo</span><input name="email" type="email" value="{{ old('email') }}" required maxlength="160" autocomplete="email">@error('email')<small class="form-error">{{ $message }}</small>@enderror</label>
                         <label><span>WhatsApp</span><input name="whatsapp" value="{{ old('whatsapp') }}" required maxlength="24" autocomplete="tel" inputmode="tel">@error('whatsapp')<small class="form-error">{{ $message }}</small>@enderror</label>
-                        <label><span>Nombre del negocio</span><input name="business_name" value="{{ old('business_name') }}" required maxlength="140" autocomplete="organization">@error('business_name')<small class="form-error">{{ $message }}</small>@enderror</label>
+                        <label><span>Nombre del negocio <small>(opcional)</small></span><input name="business_name" value="{{ old('business_name') }}" maxlength="140" autocomplete="organization">@error('business_name')<small class="form-error">{{ $message }}</small>@enderror</label>
                         <input type="hidden" name="country" value="MX">
                         <div class="payment-provider" role="note" aria-label="Método de pago disponible">
                             <span class="payment-provider__mark" aria-hidden="true">MP</span>
