@@ -1,4 +1,4 @@
-<x-layouts.app title="Aviso de privacidad — XpertSystems" description="Aviso de privacidad de XpertSystems.">
+<x-layouts.app title="Aviso de privacidad — XpertSystems" description="Aviso de privacidad de XpertSystems." robots="noindex,follow">
     <div class="checkout-page"><header class="checkout-header"><div class="container checkout-header__inner"><a href="{{ route('home') }}"><x-brand /></a><a href="{{ route('home') }}">← Volver</a></div></header>
         <main class="legal-page"><span class="return-status">Información legal</span><h1>Aviso de privacidad</h1><p>Última actualización: {{ date('d/m/Y') }}</p>
             <h2>Datos que recopilamos</h2><p>Recopilamos los datos que nos compartes en formularios de contacto y contratación: nombre, correo, WhatsApp, país, nombre del negocio y la información necesaria para atender tu proyecto.</p>

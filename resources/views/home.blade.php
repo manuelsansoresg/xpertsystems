@@ -1,13 +1,30 @@
-<x-layouts.app>
+<x-layouts.app
+    title="Páginas Web para Negocios en México | XpertSystems"
+    description="Creamos páginas web, landing pages y tiendas en línea para negocios que quieren generar confianza, atraer prospectos y recibir contactos en México."
+    :canonical="route('home')"
+>
     @push('head')
         <script type="application/ld+json">{!! json_encode([
             '@'.'context' => 'https://schema.org',
-            '@type' => 'ProfessionalService',
-            'name' => 'XpertSystems',
-            'url' => route('home'),
-            'description' => 'Diseño y desarrollo de sitios web profesionales para negocios.',
-            'areaServed' => ['México', 'Internacional'],
-            'priceRange' => '$$'
+            '@graph' => [array_filter([
+                '@type' => ['Organization', 'ProfessionalService'],
+                '@id' => route('home').'#organization',
+                'name' => 'XpertSystems',
+                'url' => route('home'),
+                'logo' => asset('images/logo-site.png'),
+                'description' => 'Diseño y desarrollo de páginas web, landing pages y tiendas en línea para negocios.',
+                'areaServed' => [['@type' => 'Country', 'name' => 'México'], ['@type' => 'City', 'name' => 'Mérida']],
+                'email' => $contactEmail ?: null,
+                'telephone' => $whatsapp ? '+'.$whatsapp : null,
+                'priceRange' => '$$'
+            ], fn ($value) => $value !== null), [
+                '@type' => 'WebSite',
+                '@id' => route('home').'#website',
+                'url' => route('home'),
+                'name' => 'XpertSystems',
+                'inLanguage' => 'es-MX',
+                'publisher' => ['@id' => route('home').'#organization']
+            ]]
         ], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush
 
@@ -20,17 +37,17 @@
     <div x-data="siteShell" class="site-shell">
         <header class="site-header" :class="{ 'is-scrolled': scrolled }" x-init="initHeader()">
             <div class="container header__inner">
-                <a href="#inicio" class="brand-link" aria-label="XpertSystems, inicio"><x-brand /></a>
+                <a href="{{ route('home') }}" class="brand-link" aria-label="XpertSystems, inicio"><x-brand /></a>
                 <nav class="desktop-nav" aria-label="Navegación principal">
-                    <a href="#servicios">Servicios</a><a href="#proyectos">Proyectos</a><a href="#paquetes">Paquetes</a><a href="#proceso">Cómo funciona</a><a href="#preguntas">Preguntas</a>
+                    <a href="{{ route('paginas-web') }}">Páginas web</a><a href="{{ route('landing-pages') }}">Landing pages</a><a href="{{ route('tiendas-en-linea') }}">Tiendas</a><a href="{{ route('portafolio') }}">Portafolio</a><a href="{{ route('precios') }}">Precios</a>
                 </nav>
-                <a href="#paquetes" class="button button--small button--cream desktop-cta" data-analytics="view_packages">Ver paquetes <span>↘</span></a>
+                <a href="{{ route('contacto') }}" class="button button--small button--cream desktop-cta" data-analytics="quote_request">Cotizar <span>↘</span></a>
                 <button type="button" class="menu-toggle" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen" aria-controls="mobile-menu"><span></span><span></span><span class="sr-only">Abrir menú</span></button>
             </div>
             <div id="mobile-menu" class="mobile-menu" x-cloak x-show="menuOpen" x-transition.opacity @click.outside="menuOpen = false">
                 <nav aria-label="Navegación móvil">
-                    <a @click="menuOpen=false" href="#servicios">Servicios</a><a @click="menuOpen=false" href="#proyectos">Proyectos</a><a @click="menuOpen=false" href="#paquetes">Paquetes</a><a @click="menuOpen=false" href="#proceso">Cómo funciona</a><a @click="menuOpen=false" href="#preguntas">Preguntas</a>
-                    <a @click="menuOpen=false" href="#paquetes" class="button button--gold">Ver paquetes</a>
+                    <a @click="menuOpen=false" href="{{ route('paginas-web') }}">Páginas web</a><a @click="menuOpen=false" href="{{ route('landing-pages') }}">Landing pages</a><a @click="menuOpen=false" href="{{ route('tiendas-en-linea') }}">Tiendas en línea</a><a @click="menuOpen=false" href="{{ route('portafolio') }}">Portafolio</a><a @click="menuOpen=false" href="{{ route('precios') }}">Precios</a>
+                    <a @click="menuOpen=false" href="{{ route('contacto') }}" class="button button--gold">Cotizar proyecto</a>
                 </nav>
             </div>
         </header>
@@ -42,11 +59,7 @@
                     <div class="hero__content">
                         <div class="hero__eyebrow reveal-line"><span class="status-dot"></span> Desarrollo web para negocios que quieren crecer</div>
                         <div class="hero__headline">
-                            <h1>
-                                <span>Tu negocio merece</span>
-                                <span>más que solo</span>
-                                <em>redes sociales.</em>
-                            </h1>
+                            <h1><span>Páginas web que</span><span>ayudan a tu negocio</span><em>a conseguir clientes.</em></h1>
                         </div>
                         <div class="hero__copy reveal-up">
                             <p>Creamos sitios web profesionales diseñados para generar confianza, mostrar tus servicios y convertir visitantes en clientes.</p>
@@ -60,7 +73,7 @@
 
                     <div class="hero-stage">
                         <div class="hero-stage__halo" aria-hidden="true"></div>
-                        <img class="hero-stage__image" src="{{ asset('images/hero.png') }}" alt="Sitio web de XpertSystems mostrado en computadora, teléfono y paneles de servicios">
+                        <picture><source srcset="{{ asset('images/hero.webp') }}" type="image/webp"><img class="hero-stage__image" src="{{ asset('images/hero.png') }}" alt="Ejemplo de una página web profesional adaptable a computadora y celular" width="1448" height="1086" fetchpriority="high" decoding="async"></picture>
                     </div>
                 </div>
             </section>
@@ -72,6 +85,8 @@
                     @endforeach
                 </div>
             </aside>
+
+            <section class="seo-related section--light" aria-labelledby="home-services-title"><div class="container"><p class="seo-section-label">Servicios según tu objetivo</p><h2 id="home-services-title">Una solución distinta para cada forma de vender</h2><div class="seo-related__grid"><a href="{{ route('landing-pages') }}"><span>Captar prospectos</span><strong>Landing pages para campañas y servicios</strong><i aria-hidden="true">→</i></a><a href="{{ route('paginas-web') }}"><span>Presentar tu negocio</span><strong>Páginas web profesionales</strong><i aria-hidden="true">→</i></a><a href="{{ route('tiendas-en-linea') }}"><span>Vender productos</span><strong>Tiendas en línea administrables</strong><i aria-hidden="true">→</i></a><a href="{{ route('paginas-web-merida') }}"><span>Mercado local</span><strong>Diseño de páginas web en Mérida</strong><i aria-hidden="true">→</i></a></div></div></section>
 
             <section id="servicios" class="problem section--cream">
                 <div class="container problem__grid">
@@ -140,7 +155,7 @@
                     'slug' => $p->slug,
                     'category' => $p->category,
                     'description' => $p->description,
-                    'desktop_image' => $p->desktop_image ?: (file_exists(public_path('images/portafolio/'.$p->slug.'.png')) ? asset('images/portafolio/'.$p->slug.'.png') : null),
+                    'desktop_image' => $p->desktop_image ?: (file_exists(public_path('images/portafolio/'.$p->slug.'.webp')) ? asset('images/portafolio/'.$p->slug.'.webp') : (file_exists(public_path('images/portafolio/'.$p->slug.'.png')) ? asset('images/portafolio/'.$p->slug.'.png') : null)),
                     'mobile_image' => $p->mobile_image ?: (file_exists(public_path('images/portafolio/'.$p->slug.'-mobile.png')) ? asset('images/portafolio/'.$p->slug.'-mobile.png') : null),
                     'url' => $p->url,
                     'accent' => $p->accent,
@@ -165,7 +180,7 @@
                             <div class="project-meta"><span aria-hidden="true"></span><small x-text="current.category || 'Proyecto web'"></small></div>
                             <div class="project-canvas">
                                 <div class="project-browser">
-                                    <template x-if="current.desktop_image"><img :src="current.desktop_image" :alt="`Vista de ${current.name}`"></template>
+                                    <template x-if="current.desktop_image"><img :src="current.desktop_image" :alt="`Vista del proyecto web ${current.name}`" width="1200" height="760" loading="lazy" decoding="async"></template>
                                     <template x-if="!current.desktop_image"><div class="project-art"><div class="browser__bar"><i></i><i></i><i></i><span x-text="current.slug + '.com'"></span></div><div class="project-art__inner"><div class="project-art__nav"><strong x-text="current.name"></strong><span>Proyecto / 2026</span></div><div class="project-art__body"><small>DISEÑO WEB A MEDIDA</small><b>Una presencia<br>con intención.</b><p>Claridad, identidad y una experiencia pensada para conectar.</p><em>Descubrir →</em></div></div></div></template>
                                 </div>
                                 <template x-if="current.mobile_image">
@@ -278,7 +293,7 @@
                         <div class="section-kicker"><span>TIENDA</span> Cotización personalizada</div>
                         <h2 id="quote-title">Cuéntanos qué quieres vender.</h2>
                         <p>Revisamos tus productos, envíos e integraciones antes de darte una cifra definitiva.</p>
-                        <form method="POST" action="{{ route('quote.store', $quotePackage) }}" class="quote-form">
+                        <form method="POST" action="{{ route('quote.store', $quotePackage) }}" class="quote-form" data-analytics-submit="form_submit" data-package="{{ $quotePackage->slug }}">
                             @csrf
                             <div class="honeypot" aria-hidden="true"><label>Tu sitio web<input name="website" tabindex="-1" autocomplete="off"></label></div>
                             <label><span>Nombre</span><input name="name" required maxlength="100" autocomplete="name"></label>
@@ -384,10 +399,12 @@
                 </div>
                 <nav class="footer__nav" aria-label="Navegación del pie">
                     <b>Explorar</b>
-                    <a href="#servicios">Servicios</a>
-                    <a href="#proyectos">Proyectos</a>
-                    <a href="#paquetes">Paquetes</a>
-                    <a href="#contacto">Contacto</a>
+                    <a href="{{ route('paginas-web') }}">Páginas web</a>
+                    <a href="{{ route('landing-pages') }}">Landing pages</a>
+                    <a href="{{ route('tiendas-en-linea') }}">Tiendas en línea</a>
+                    <a href="{{ route('portafolio') }}">Portafolio</a>
+                    <a href="{{ route('precios') }}">Precios</a>
+                    <a href="{{ route('contacto') }}">Contacto</a>
                 </nav>
                 <nav class="footer__nav" aria-label="Información legal">
                     <b>Información</b>

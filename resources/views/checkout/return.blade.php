@@ -21,7 +21,7 @@
     };
     $waUrl = $whatsapp ? 'https://wa.me/'.$whatsapp.'?text='.rawurlencode("Hola, necesito ayuda con el pago de la orden {$order->reference}.") : route('home').'#contacto';
 @endphp
-<x-layouts.app :title="$content['label'].' — XpertSystems'" description="Estado del pago de tu proyecto con XpertSystems.">
+<x-layouts.app :title="$content['label'].' — XpertSystems'" description="Estado del pago de tu proyecto con XpertSystems." robots="noindex,nofollow">
     <div class="checkout-page">
         <header class="checkout-header"><div class="container checkout-header__inner"><a href="{{ route('home') }}"><x-brand /></a><a href="{{ route('home') }}">Ir al inicio</a></div></header>
         <main id="contenido" class="return-card {{ $content['class'] }}">

@@ -1,6 +1,7 @@
 <x-layouts.app
     :title="'Contratar '.$package->name.' — XpertSystems'"
     description="Completa tus datos y realiza el pago único para comenzar tu proyecto con XpertSystems."
+    robots="noindex,nofollow"
 >
     @php($waUrl = $whatsapp ? 'https://wa.me/'.$whatsapp.'?text='.rawurlencode("Hola, vi el paquete {$package->name} de XpertSystems y quisiera resolver una duda antes de contratar.") : route('home').'#contacto')
     <div class="checkout-page">
@@ -13,13 +14,13 @@
                     <p>Completa tus datos y revisa el resumen antes de continuar al pago seguro de Mercado Pago.</p>
                 </div>
                 <div class="checkout__grid">
-                    <form method="POST" action="{{ route('checkout.store', $package) }}" class="checkout-form" data-checkout-form>
+                    <form method="POST" action="{{ route('checkout.store', $package) }}" class="checkout-form" data-checkout-form data-analytics-submit="form_submit">
                         @csrf
                         <div class="honeypot" aria-hidden="true"><label>Tu sitio web<input name="website" tabindex="-1" autocomplete="off"></label></div>
-                        @if(session('payment_error'))<div class="form-alert">{{ session('payment_error') }}</div>@endif
-                        <label><span>Nombre completo</span><input name="name" value="{{ old('name') }}" required maxlength="100" autocomplete="name">@error('name')<small class="form-error">{{ $message }}</small>@enderror</label>
-                        <label><span>Correo</span><input name="email" type="email" value="{{ old('email') }}" required maxlength="160" autocomplete="email">@error('email')<small class="form-error">{{ $message }}</small>@enderror</label>
-                        <label><span>WhatsApp</span><input name="whatsapp" value="{{ old('whatsapp') }}" required maxlength="24" autocomplete="tel" inputmode="tel">@error('whatsapp')<small class="form-error">{{ $message }}</small>@enderror</label>
+                        @if(session('payment_error'))<div class="form-alert" role="alert">{{ session('payment_error') }}</div>@endif
+                        <label><span>Nombre completo</span><input name="name" value="{{ old('name') }}" required maxlength="100" autocomplete="name" @error('name') aria-invalid="true" aria-describedby="name-error" @enderror>@error('name')<small class="form-error" id="name-error" role="alert">{{ $message }}</small>@enderror</label>
+                        <label><span>Correo</span><input name="email" type="email" value="{{ old('email') }}" required maxlength="160" autocomplete="email" @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>@error('email')<small class="form-error" id="email-error" role="alert">{{ $message }}</small>@enderror</label>
+                        <label><span>WhatsApp</span><input name="whatsapp" value="{{ old('whatsapp') }}" required maxlength="24" autocomplete="tel" inputmode="tel" @error('whatsapp') aria-invalid="true" aria-describedby="whatsapp-error" @enderror>@error('whatsapp')<small class="form-error" id="whatsapp-error" role="alert">{{ $message }}</small>@enderror</label>
                         <label><span>Nombre del negocio <small>(opcional)</small></span><input name="business_name" value="{{ old('business_name') }}" maxlength="140" autocomplete="organization">@error('business_name')<small class="form-error">{{ $message }}</small>@enderror</label>
                         <input type="hidden" name="country" value="MX">
                         <div class="payment-provider" role="note" aria-label="Método de pago disponible">

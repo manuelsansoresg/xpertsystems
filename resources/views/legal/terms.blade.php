@@ -1,4 +1,4 @@
-<x-layouts.app title="Términos del servicio — XpertSystems" description="Términos de contratación de XpertSystems.">
+<x-layouts.app title="Términos del servicio — XpertSystems" description="Términos de contratación de XpertSystems." robots="noindex,follow">
     <div class="checkout-page"><header class="checkout-header"><div class="container checkout-header__inner"><a href="{{ route('home') }}"><x-brand /></a><a href="{{ route('home') }}">← Volver</a></div></header>
         <main class="legal-page"><span class="return-status">Información legal</span><h1>Términos del servicio</h1><p>Última actualización: {{ date('d/m/Y') }}</p>
             <h2>Inicio del proyecto</h2><p>El pago único confirma el proyecto y permite comenzar el levantamiento de información. Una vez liquidado, iniciamos el desarrollo según el alcance acordado.</p>

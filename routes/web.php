@@ -12,13 +12,24 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\Seller\CouponController as SellerCouponController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
+use App\Http\Controllers\SeoPageController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', LandingController::class)->name('home');
+
+Route::get('/landing-pages', SeoPageController::class)->defaults('page', 'landing-pages')->name('landing-pages');
+Route::get('/paginas-web', SeoPageController::class)->defaults('page', 'paginas-web')->name('paginas-web');
+Route::permanentRedirect('/paginas-web-profesionales', '/paginas-web');
+Route::get('/tiendas-en-linea', SeoPageController::class)->defaults('page', 'tiendas-en-linea')->name('tiendas-en-linea');
+Route::get('/paginas-web-merida', SeoPageController::class)->defaults('page', 'paginas-web-merida')->name('paginas-web-merida');
+Route::get('/portafolio', SeoPageController::class)->defaults('page', 'portafolio')->name('portafolio');
+Route::get('/precios', SeoPageController::class)->defaults('page', 'precios')->name('precios');
+Route::get('/contacto', SeoPageController::class)->defaults('page', 'contacto')->name('contacto');
 
 Route::get('/contratar/{package:slug}', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/contratar/{package:slug}', [CheckoutController::class, 'store'])
@@ -41,6 +52,7 @@ Route::post('/webhooks/paypal', [WebhookController::class, 'paypal'])
 
 Route::view('/aviso-de-privacidad', 'legal.privacy')->name('privacy');
 Route::view('/terminos', 'legal.terms')->name('terms');
+Route::get('/robots.txt', RobotsController::class)->name('robots');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::prefix('admin')->name('admin.')->group(function (): void {

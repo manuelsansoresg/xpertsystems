@@ -1,4 +1,4 @@
-@props(['title' => null, 'description' => null, 'canonical' => null])
+@props(['title' => null, 'description' => null, 'canonical' => null, 'robots' => 'index,follow,max-image-preview:large', 'image' => null, 'script' => 'resources/js/app.js'])
 <!DOCTYPE html>
 <html lang="es-MX" class="scroll-smooth">
 <head>
@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'XpertSystems — Desarrollo web para negocios' }}</title>
     <meta name="description" content="{{ $description ?? 'Diseño y desarrollo de páginas web profesionales para negocios en México. Dominio, hosting y SSL incluidos durante el primer año.' }}">
+    <meta name="robots" content="{{ $robots }}">
     <link rel="canonical" href="{{ $canonical ?? url()->current() }}">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_MX">
@@ -15,19 +16,23 @@
     <meta property="og:title" content="{{ $title ?? 'XpertSystems — Desarrollo web para negocios' }}">
     <meta property="og:description" content="{{ $description ?? 'Sitios web profesionales que generan confianza y convierten visitas en clientes.' }}">
     <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
-    @if(file_exists(public_path('og-xpertsystems.png')))
-        <meta property="og:image" content="{{ asset('og-xpertsystems.png') }}">
+    @if($image || file_exists(public_path('og-xpertsystems.png')))
+        <meta property="og:image" content="{{ $image ?? asset('og-xpertsystems.png') }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="628">
+        <meta property="og:image:alt" content="XpertSystems, diseño y desarrollo web para negocios">
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="{{ asset('og-xpertsystems.png') }}">
+        <meta name="twitter:image" content="{{ $image ?? asset('og-xpertsystems.png') }}">
     @else
         <meta name="twitter:card" content="summary">
     @endif
     <meta name="twitter:title" content="{{ $title ?? 'XpertSystems — Desarrollo web para negocios' }}">
     <meta name="twitter:description" content="{{ $description ?? 'Sitios web profesionales que generan confianza y convierten visitas en clientes.' }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', $script])
     @stack('head')
 
     @if(config('services.analytics.ga4_id'))

@@ -19,7 +19,7 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk()
-            ->assertSee('Tu negocio merece')
+            ->assertSee('Páginas web que')
             ->assertSee('Página Profesional')
             ->assertSee('$4,400', false);
     }

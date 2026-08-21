@@ -97,16 +97,23 @@ window.Alpine = Alpine;
 Alpine.start();
 
 const trackEvent = (name, parameters = {}) => {
-    if (typeof window.gtag === 'function') window.gtag('event', name, parameters);
+    const normalizedName = { contact_whatsapp: 'click_whatsapp' }[name] || name;
+    if (typeof window.gtag === 'function') window.gtag('event', normalizedName, parameters);
     if (typeof window.fbq === 'function') {
         const metaNames = { purchase: 'Purchase', begin_checkout: 'InitiateCheckout' };
-        window.fbq('trackCustom', metaNames[name] || name, parameters);
+        window.fbq('trackCustom', metaNames[normalizedName] || normalizedName, parameters);
     }
 };
 
 document.querySelectorAll('[data-analytics]').forEach((element) => {
     element.addEventListener('click', () => trackEvent(element.dataset.analytics, {
         package: element.dataset.package || undefined,
+    }));
+});
+
+document.querySelectorAll('form[data-analytics-submit]').forEach((form) => {
+    form.addEventListener('submit', () => trackEvent(form.dataset.analyticsSubmit, {
+        package: form.querySelector('[name="package_id"]')?.value || form.dataset.package || undefined,
     }));
 });
 
