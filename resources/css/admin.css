@@ -30,7 +30,7 @@
 .admin-nav__label { display: block; margin: 1.2rem .65rem .5rem; color: rgba(255, 255, 255, .36); font-family: 'DM Mono', monospace; font-size: .51rem; letter-spacing: .16em; text-transform: uppercase; }
 .admin-nav a,
 .admin-nav__pending { min-height: 42px; display: flex; align-items: center; gap: .75rem; padding: 0 .75rem; color: rgba(255, 255, 255, .68); font-size: .73rem; border: 1px solid transparent; }
-.admin-nav a svg { width: 16px; height: 16px; fill: currentColor; opacity: .7; }
+.admin-nav a > .fa-solid { width: 16px; text-align: center; font-size: .8rem; opacity: .75; }
 .admin-nav a.is-active { position: relative; background: rgba(216, 182, 117, .11); border-color: rgba(216, 182, 117, .18); color: white; }
 .admin-nav a.is-active::before { content: ''; position: absolute; left: -1rem; width: 3px; height: 22px; background: var(--admin-gold); }
 .admin-nav__pending { min-height: 36px; color: rgba(255, 255, 255, .38); }
@@ -54,8 +54,7 @@
 .admin-topbar > div:first-of-type strong { margin-top: .18rem; font-size: .76rem; }
 .admin-topbar__meta { display: flex; align-items: center; gap: .75rem; color: rgba(7, 25, 35, .5); font-family: 'DM Mono', monospace; font-size: .53rem; letter-spacing: .07em; text-transform: uppercase; }
 .admin-topbar__meta .status-dot { width: 5px; height: 5px; box-shadow: 0 0 0 4px rgba(47, 118, 95, .09); background: var(--admin-green); }
-.admin-menu-button { display: none; width: 40px; height: 40px; padding: 0 10px; border: 1px solid var(--admin-line); background: transparent; }
-.admin-menu-button span { display: block; height: 1px; margin: 6px 0; background: var(--admin-ink); }
+.admin-menu-button { display: none; width: 40px; height: 40px; padding: 0; border: 1px solid var(--admin-line); background: transparent; color: var(--admin-ink); align-items: center; justify-content: center; cursor: pointer; }
 .admin-main { padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 3.5vw, 3.5rem) 4rem; }
 
 .admin-dashboard-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: end; padding-bottom: 2.25rem; border-bottom: 1px solid var(--admin-line); }
@@ -184,7 +183,7 @@
     .admin-sidebar.is-open { transform: translateX(0); }
     .admin-sidebar__close { display: block; }
     .admin-topbar { grid-template-columns: auto 1fr auto; padding-inline: 1.2rem; }
-    .admin-menu-button { display: block; }
+    .admin-menu-button { display: inline-flex; }
     .admin-main { padding-inline: 1.2rem; }
     .admin-login { grid-template-columns: 1fr; }
     .admin-login__brand { min-height: 340px; padding: 1.5rem 2rem 2rem; }
@@ -258,8 +257,17 @@
 .admin-code--large { font-size: 1.1rem; padding: .5rem .75rem; display: inline-block; margin-bottom: 1rem; }
 
 .admin-actions { display: flex; gap: .35rem; align-items: center; }
-.admin-actions__btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--admin-line); background: transparent; color: rgba(7, 25, 35, .55); cursor: pointer; font-size: .75rem; transition: color .2s, border-color .2s; text-decoration: none; }
-.admin-actions__btn:hover { color: var(--admin-navy); border-color: var(--admin-navy); }
+.admin-actions__btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid currentColor; background: transparent; cursor: pointer; font-size: .78rem; transition: color .2s, background-color .2s, border-color .2s, transform .2s; text-decoration: none; }
+.admin-actions__btn:hover { transform: translateY(-1px); }
+.admin-actions__btn:focus-visible { outline: 2px solid var(--admin-navy); outline-offset: 2px; }
+.admin-actions__btn--view { color: #2f647c; background: rgba(75, 130, 155, .11); }
+.admin-actions__btn--view:hover { color: white; background: #2f647c; border-color: #2f647c; }
+.admin-actions__btn--edit { color: #765817; background: rgba(216, 182, 117, .18); }
+.admin-actions__btn--edit:hover { color: white; background: #765817; border-color: #765817; }
+.admin-actions__btn--danger { color: #923e37; background: rgba(169, 74, 66, .11); }
+.admin-actions__btn--danger:hover { color: white; background: #923e37; border-color: #923e37; }
+.admin-actions__btn--success { color: #23634e; background: rgba(47, 118, 95, .11); }
+.admin-actions__btn--success:hover { color: white; background: #23634e; border-color: #23634e; }
 
 .admin-pagination { padding: 1rem 1.35rem; border-top: 1px solid var(--admin-line); display: flex; justify-content: center; }
 .admin-pagination nav { display: flex; gap: .25rem; }

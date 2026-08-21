@@ -5,7 +5,7 @@
             <h1>Comisión #{{ $commission->id }}</h1>
             <p>{{ $commission->seller->name }} — {{ $commission->seller->email }}</p>
         </div>
-        <a href="{{ route('admin.commissions.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+        <a href="{{ route('admin.commissions.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
     </section>
 
     <div class="admin-profile-grid">

@@ -134,7 +134,7 @@
                     <h2>Cupones asignados</h2>
                 </div>
                 <a href="{{ route('admin.coupons.create', ['seller_id' => $seller->user_id]) }}" class="admin-btn admin-btn--ghost" style="font-size:.75rem;padding:.35rem .7rem">
-                    + Crear cupón
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Crear cupón
                 </a>
             </header>
             <div class="admin-panel__body">
@@ -173,7 +173,7 @@
                                             <span class="admin-status admin-status--{{ $coupon->statusColor() }}">{{ $coupon->statusLabel() }}</span>
                                         </td>
                                         <td data-label="">
-                                            <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-actions__btn" title="Ver">👁</a>
+                                            <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver" aria-label="Ver cupón {{ $coupon->code }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -181,7 +181,7 @@
                         </table>
                     </div>
                     <div style="margin-top:.75rem;text-align:right">
-                        <a href="{{ route('admin.coupons.index', ['seller_id' => $seller->user_id]) }}" class="admin-link-small">Ver todos los cupones →</a>
+                        <a href="{{ route('admin.coupons.index', ['seller_id' => $seller->user_id]) }}" class="admin-link-small">Ver todos los cupones <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 @endif
             </div>

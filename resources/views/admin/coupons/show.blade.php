@@ -207,6 +207,6 @@
     </div>
 
     <div style="margin-top:2rem;display:flex;gap:.75rem;justify-content:flex-end">
-        <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost">← Volver al listado</a>
+        <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver al listado</a>
     </div>
 </x-layouts.admin>

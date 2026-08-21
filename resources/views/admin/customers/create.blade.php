@@ -5,7 +5,7 @@
             <h1>Nuevo cliente</h1>
             <p>Registra un cliente o prospecto comercial.</p>
         </div>
-        <a href="{{ route('admin.customers.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+        <a href="{{ route('admin.customers.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
     </section>
 
     <form method="POST" action="{{ route('admin.customers.store') }}" class="admin-form">

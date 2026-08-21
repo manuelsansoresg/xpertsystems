@@ -93,7 +93,7 @@
                                 <td data-label="Fecha">{{ $payout->created_at->format('d/m/Y') }}</td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.payouts.show', $payout) }}" class="admin-actions__btn" title="Ver detalle">👁</a>
+                                        <a href="{{ route('admin.payouts.show', $payout) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver detalle" aria-label="Ver detalle del pago {{ $payout->id }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
                                     </div>
                                 </td>
                             </tr>

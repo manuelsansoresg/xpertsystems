@@ -6,7 +6,7 @@
             <p>Gestiona descuentos, campañas y cupones asociados a tu equipo comercial.</p>
         </div>
         <a href="{{ route('admin.coupons.create') }}" class="admin-btn admin-btn--primary">
-            + Nuevo cupón
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo cupón
         </a>
     </section>
 
@@ -130,13 +130,13 @@
                                 </td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-actions__btn" title="Ver detalle">👁</a>
-                                        <a href="{{ route('admin.coupons.edit', $coupon) }}" class="admin-actions__btn" title="Editar">✎</a>
+                                        <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver detalle" aria-label="Ver detalle del cupón {{ $coupon->code }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
+                                        <a href="{{ route('admin.coupons.edit', $coupon) }}" class="admin-actions__btn admin-actions__btn--edit" title="Editar" aria-label="Editar cupón {{ $coupon->code }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
                                         <form method="POST" action="{{ route('admin.coupons.toggle', $coupon) }}" style="display:inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="admin-actions__btn" title="{{ $coupon->is_active ? 'Desactivar' : 'Activar' }}">
-                                                {{ $coupon->is_active ? '⊘' : '✓' }}
+                                            <button type="submit" class="admin-actions__btn {{ $coupon->is_active ? 'admin-actions__btn--danger' : 'admin-actions__btn--success' }}" title="{{ $coupon->is_active ? 'Desactivar' : 'Activar' }}" aria-label="{{ $coupon->is_active ? 'Desactivar' : 'Activar' }} cupón {{ $coupon->code }}">
+                                                <i class="fa-solid {{ $coupon->is_active ? 'fa-toggle-off' : 'fa-toggle-on' }}" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>

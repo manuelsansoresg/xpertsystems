@@ -6,7 +6,7 @@
             <p>Gestiona vendedores, códigos de referido y reglas de comisión.</p>
         </div>
         <a href="{{ route('admin.users.create') }}" class="admin-btn admin-btn--primary">
-            + Nuevo vendedor
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo vendedor
         </a>
     </section>
 
@@ -105,14 +105,14 @@
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
                                         @if($seller->sellerProfile)
-                                            <a href="{{ route('admin.sellers.show', $seller->sellerProfile) }}" class="admin-actions__btn" title="Ver perfil">👁</a>
-                                            <a href="{{ route('admin.sellers.edit', $seller->sellerProfile) }}" class="admin-actions__btn" title="Editar">✎</a>
+                                            <a href="{{ route('admin.sellers.show', $seller->sellerProfile) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver perfil" aria-label="Ver perfil de {{ $seller->name }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
+                                            <a href="{{ route('admin.sellers.edit', $seller->sellerProfile) }}" class="admin-actions__btn admin-actions__btn--edit" title="Editar" aria-label="Editar {{ $seller->name }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
                                             @if(! $seller->is(auth()->user()))
                                                 <form method="POST" action="{{ route('admin.sellers.toggle', $seller->sellerProfile) }}">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="admin-actions__btn" title="{{ $seller->active ? 'Desactivar' : 'Activar' }}">
-                                                        {{ $seller->active ? '⊘' : '✓' }}
+                                                    <button type="submit" class="admin-actions__btn {{ $seller->active ? 'admin-actions__btn--danger' : 'admin-actions__btn--success' }}" title="{{ $seller->active ? 'Desactivar' : 'Activar' }}" aria-label="{{ $seller->active ? 'Desactivar' : 'Activar' }} {{ $seller->name }}">
+                                                        <i class="fa-solid {{ $seller->active ? 'fa-toggle-off' : 'fa-toggle-on' }}" aria-hidden="true"></i>
                                                     </button>
                                                 </form>
                                             @endif

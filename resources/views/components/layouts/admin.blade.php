@@ -19,7 +19,7 @@
         <aside class="admin-sidebar" :class="{ 'is-open': sidebarOpen }" aria-label="Navegación del panel">
             <div class="admin-sidebar__brand">
                 <a href="{{ route('admin.dashboard') }}" aria-label="XpertSystems, panel principal"><x-brand /></a>
-                <button type="button" class="admin-sidebar__close" @click="sidebarOpen = false" aria-label="Cerrar navegación">×</button>
+                <button type="button" class="admin-sidebar__close" @click="sidebarOpen = false" aria-label="Cerrar navegación"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </div>
 
             <div class="admin-sidebar__context">
@@ -34,43 +34,43 @@
 
                 <span class="admin-nav__label">Inicio</span>
                 <a href="{{ route('admin.dashboard') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.dashboard') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.dashboard')) aria-current="page" @endif>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg>
+                    <i class="fa-solid fa-table-columns" aria-hidden="true"></i>
                     <span>Dashboard</span>
                 </a>
 
                 @if(auth()->user()->isAdmin())
                     <span class="admin-nav__label">Vendedores</span>
                     <a href="{{ route('admin.sellers.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.sellers') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.sellers')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3Zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5Zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5Z"/></svg>
+                        <i class="fa-solid fa-user-group" aria-hidden="true"></i>
                         <span>Equipo</span>
                     </a>
                     <a href="{{ route('admin.commissions.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.commissions') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.commissions')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2Zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.94s4.18 1.36 4.18 3.85c-.01 1.83-1.38 2.83-3.12 3.19Z"/></svg>
+                        <i class="fa-solid fa-coins" aria-hidden="true"></i>
                         <span>Comisiones</span>
                     </a>
                     <a href="{{ route('admin.payouts.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.payouts') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.payouts')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9Zm-9-2h10V8H12v8Zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5Z"/></svg>
+                        <i class="fa-solid fa-wallet" aria-hidden="true"></i>
                         <span>Pagos</span>
                     </a>
 
                     <span class="admin-nav__label">Comercial</span>
                     <span class="admin-nav__pending"><i></i>Ventas<small>Próxima fase</small></span>
                     <a href="{{ route('admin.customers.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.customers') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.customers')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z"/></svg>
+                        <i class="fa-solid fa-address-book" aria-hidden="true"></i>
                         <span>Clientes</span>
                     </a>
                     <a href="{{ route('admin.packages.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.packages') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.packages')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2Zm-6 0h-4V4h4v2Z"/></svg>
+                        <i class="fa-solid fa-box-open" aria-hidden="true"></i>
                         <span>Paquetes</span>
                     </a>
                     <a href="{{ route('admin.coupons.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.coupons') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.coupons')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                        <i class="fa-solid fa-ticket" aria-hidden="true"></i>
                         <span>Cupones</span>
                     </a>
 
                     <span class="admin-nav__label">Sistema</span>
                     <a href="{{ route('admin.users.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'admin.users') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'admin.users')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4Z"/></svg>
+                        <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
                         <span>Usuarios</span>
                     </a>
                     <span class="admin-nav__pending"><i></i>Auditoría<small>Próxima fase</small></span>
@@ -80,7 +80,7 @@
                     <span class="admin-nav__pending"><i></i>Mis ventas<small>Próxima fase</small></span>
                     <span class="admin-nav__pending"><i></i>Mis clientes<small>Próxima fase</small></span>
                     <a href="{{ route('seller.coupons.index') }}" class="{{ str_starts_with($currentRoute ?? '', 'seller.coupons') ? 'is-active' : '' }}" @if(str_starts_with($currentRoute ?? '', 'seller.coupons')) aria-current="page" @endif>
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+                        <i class="fa-solid fa-ticket" aria-hidden="true"></i>
                         <span>Mis cupones</span>
                     </a>
                     <span class="admin-nav__pending"><i></i>Mis comisiones<small>Próxima fase</small></span>
@@ -93,16 +93,14 @@
                 <span><strong>{{ auth()->user()->name }}</strong><small>{{ auth()->user()->email }}</small></span>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button type="submit" title="Cerrar sesión" aria-label="Cerrar sesión">↗</button>
+                    <button type="submit" title="Cerrar sesión" aria-label="Cerrar sesión"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i></button>
                 </form>
             </div>
         </aside>
 
         <div class="admin-workspace">
             <header class="admin-topbar">
-                <button type="button" class="admin-menu-button" @click="sidebarOpen = true" aria-label="Abrir navegación">
-                    <span></span><span></span>
-                </button>
+                <button type="button" class="admin-menu-button" @click="sidebarOpen = true" aria-label="Abrir navegación"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
                 <div>
                     <span>Panel XpertSystems</span>
                     <strong>{{ $title }}</strong>

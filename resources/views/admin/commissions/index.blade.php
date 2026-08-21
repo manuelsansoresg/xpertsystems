@@ -116,7 +116,7 @@
                                 <td data-label="Fecha">{{ $commission->created_at->format('d/m/Y') }}</td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.commissions.show', $commission) }}" class="admin-actions__btn" title="Ver detalle">👁</a>
+                                        <a href="{{ route('admin.commissions.show', $commission) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver detalle" aria-label="Ver detalle de la comisión {{ $commission->id }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
                                     </div>
                                 </td>
                             </tr>

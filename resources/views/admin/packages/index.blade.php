@@ -6,7 +6,7 @@
             <p>Gestiona los paquetes disponibles en la landing pública.</p>
         </div>
         <a href="{{ route('admin.packages.create') }}" class="admin-btn admin-btn--primary">
-            + Nuevo paquete
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo paquete
         </a>
     </section>
 
@@ -86,12 +86,12 @@
                                 </td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.packages.edit', $package) }}" class="admin-actions__btn" title="Editar">✎</a>
+                                        <a href="{{ route('admin.packages.edit', $package) }}" class="admin-actions__btn admin-actions__btn--edit" title="Editar" aria-label="Editar {{ $package->name }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
                                         <form method="POST" action="{{ route('admin.packages.toggle', $package) }}">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="admin-actions__btn" title="{{ $package->active ? 'Desactivar' : 'Activar' }}">
-                                                {{ $package->active ? '' : '✓' }}
+                                            <button type="submit" class="admin-actions__btn {{ $package->active ? 'admin-actions__btn--danger' : 'admin-actions__btn--success' }}" title="{{ $package->active ? 'Desactivar' : 'Activar' }}" aria-label="{{ $package->active ? 'Desactivar' : 'Activar' }} {{ $package->name }}">
+                                                <i class="fa-solid {{ $package->active ? 'fa-toggle-off' : 'fa-toggle-on' }}" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>

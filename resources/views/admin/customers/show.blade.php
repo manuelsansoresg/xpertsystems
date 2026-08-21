@@ -71,7 +71,7 @@
                                 $whatsappUrl = $phoneClean ? "https://wa.me/{$phoneClean}" : null;
                             @endphp
                             @if($whatsappUrl)
-                                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="admin-link-small">Abrir WhatsApp ↗</a>
+                                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="admin-link-small">Abrir WhatsApp <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
                             @endif
                         </dd>
                     </div>

@@ -5,7 +5,7 @@
             <h1>Editar vendedor</h1>
             <p>{{ $seller->user->name }} — {{ $seller->user->email }}</p>
         </div>
-        <a href="{{ route('admin.sellers.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+        <a href="{{ route('admin.sellers.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
     </section>
 
     <form method="POST" action="{{ route('admin.sellers.update', $seller) }}" class="admin-form" x-data="sellerForm()" data-generate-code-url="{{ route('admin.sellers.generate-code') }}">

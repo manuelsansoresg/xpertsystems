@@ -32,6 +32,38 @@ final class PackageModuleTest extends TestCase
             ->assertSee('Paquetes');
     }
 
+    public function test_package_list_uses_visible_font_awesome_action_states(): void
+    {
+        $admin = $this->userWithRole('admin');
+        Package::create([
+            'name' => 'Active Package',
+            'slug' => 'active-package',
+            'short_description' => 'Test',
+            'price_type' => 'fixed',
+            'price' => 100,
+            'active' => true,
+        ]);
+        Package::create([
+            'name' => 'Inactive Package',
+            'slug' => 'inactive-package',
+            'short_description' => 'Test',
+            'price_type' => 'fixed',
+            'price' => 100,
+            'active' => false,
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.packages.index'))
+            ->assertOk()
+            ->assertSee('fa-solid fa-pen', false)
+            ->assertSee('admin-actions__btn--danger', false)
+            ->assertSee('fa-toggle-off', false)
+            ->assertSee('admin-actions__btn--success', false)
+            ->assertSee('fa-toggle-on', false)
+            ->assertSee('aria-label="Desactivar Active Package"', false)
+            ->assertSee('aria-label="Activar Inactive Package"', false);
+    }
+
     public function test_admin_can_create_package(): void
     {
         $admin = $this->userWithRole('admin');

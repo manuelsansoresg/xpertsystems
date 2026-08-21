@@ -5,7 +5,7 @@
             <h1>Nuevo cupón</h1>
             <p>Crea un cupón de descuento para campañas o tu equipo comercial.</p>
         </div>
-        <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+        <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
     </section>
 
     <form method="POST" action="{{ route('admin.coupons.store') }}" class="admin-form" x-data="{

@@ -7,7 +7,7 @@
         </div>
         <div class="admin-crud-head__actions">
             <a href="{{ route('admin.coupons.show', $coupon) }}" class="admin-btn admin-btn--ghost">Ver detalle</a>
-            <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+            <a href="{{ route('admin.coupons.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
         </div>
     </section>
 

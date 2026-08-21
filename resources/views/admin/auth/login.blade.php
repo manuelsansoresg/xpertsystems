@@ -51,7 +51,7 @@
                         <input type="checkbox" name="remember" value="1">
                         <span>Recordar esta sesión</span>
                     </label>
-                    <button type="submit" class="admin-login-button">Entrar al panel <span>→</span></button>
+                    <button type="submit" class="admin-login-button">Entrar al panel <span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></button>
                 </form>
 
                 <p class="admin-login__help">El acceso se crea únicamente desde administración. Si no puedes entrar, solicita que revisen el estado de tu cuenta.</p>

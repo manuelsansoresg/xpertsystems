@@ -6,7 +6,7 @@
             <p>Gestión de cuentas internas del sistema.</p>
         </div>
         <a href="{{ route('admin.users.create') }}" class="admin-btn admin-btn--primary">
-            + Nuevo usuario
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo usuario
         </a>
     </section>
 
@@ -89,13 +89,13 @@
                                 <td data-label="Alta">{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.users.edit', $user) }}" class="admin-actions__btn" title="Editar">✎</a>
+                                        <a href="{{ route('admin.users.edit', $user) }}" class="admin-actions__btn admin-actions__btn--edit" title="Editar" aria-label="Editar {{ $user->name }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
                                         @if(! $user->is(auth()->user()))
                                             <form method="POST" action="{{ route('admin.users.toggle', $user) }}">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="admin-actions__btn" title="{{ $user->active ? 'Desactivar' : 'Activar' }}">
-                                                    {{ $user->active ? '⊘' : '✓' }}
+                                                <button type="submit" class="admin-actions__btn {{ $user->active ? 'admin-actions__btn--danger' : 'admin-actions__btn--success' }}" title="{{ $user->active ? 'Desactivar' : 'Activar' }}" aria-label="{{ $user->active ? 'Desactivar' : 'Activar' }} {{ $user->name }}">
+                                                    <i class="fa-solid {{ $user->active ? 'fa-toggle-off' : 'fa-toggle-on' }}" aria-hidden="true"></i>
                                                 </button>
                                             </form>
                                         @endif

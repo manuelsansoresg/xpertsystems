@@ -6,7 +6,7 @@
             <p>Centraliza la información comercial de quienes preguntan, compran o llegan por tus vendedores.</p>
         </div>
         <a href="{{ route('admin.customers.create') }}" class="admin-btn admin-btn--primary">
-            + Nuevo cliente
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo cliente
         </a>
     </section>
 
@@ -130,13 +130,13 @@
                                 <td data-label="Total">${{ number_format($customer->sales_sum_total, 0) }}</td>
                                 <td data-label="Acciones">
                                     <div class="admin-actions">
-                                        <a href="{{ route('admin.customers.show', $customer) }}" class="admin-actions__btn" title="Ver ficha">👁</a>
-                                        <a href="{{ route('admin.customers.edit', $customer) }}" class="admin-actions__btn" title="Editar"></a>
+                                        <a href="{{ route('admin.customers.show', $customer) }}" class="admin-actions__btn admin-actions__btn--view" title="Ver ficha" aria-label="Ver ficha de {{ $customer->first_name }} {{ $customer->last_name }}"><i class="fa-solid fa-eye" aria-hidden="true"></i></a>
+                                        <a href="{{ route('admin.customers.edit', $customer) }}" class="admin-actions__btn admin-actions__btn--edit" title="Editar" aria-label="Editar {{ $customer->first_name }} {{ $customer->last_name }}"><i class="fa-solid fa-pen" aria-hidden="true"></i></a>
                                         <form method="POST" action="{{ route('admin.customers.toggle', $customer) }}">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="admin-actions__btn" title="{{ $customer->status === 'inactive' ? 'Reactivar' : 'Inactivar' }}">
-                                                {{ $customer->status === 'inactive' ? '✓' : '⊘' }}
+                                            <button type="submit" class="admin-actions__btn {{ $customer->status === 'inactive' ? 'admin-actions__btn--success' : 'admin-actions__btn--danger' }}" title="{{ $customer->status === 'inactive' ? 'Reactivar' : 'Inactivar' }}" aria-label="{{ $customer->status === 'inactive' ? 'Reactivar' : 'Inactivar' }} {{ $customer->first_name }} {{ $customer->last_name }}">
+                                                <i class="fa-solid {{ $customer->status === 'inactive' ? 'fa-toggle-on' : 'fa-toggle-off' }}" aria-hidden="true"></i>
                                             </button>
                                         </form>
                                     </div>

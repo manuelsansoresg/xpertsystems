@@ -15,7 +15,7 @@
         <section class="admin-referral-card" x-data="{ copied: false }">
             <div><span>Tu enlace de referido</span><strong>{{ $referralUrl }}</strong></div>
             <button type="button" @click="navigator.clipboard.writeText(@js($referralUrl)); copied = true; setTimeout(() => copied = false, 1800)">
-                <span x-text="copied ? 'Copiado' : 'Copiar enlace'"></span> ↗
+                <span x-text="copied ? 'Copiado' : 'Copiar enlace'"></span> <i class="fa-solid fa-copy" aria-hidden="true"></i>
             </button>
         </section>
     @endif

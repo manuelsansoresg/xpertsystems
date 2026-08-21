@@ -5,7 +5,7 @@
             <h1>Editar paquete</h1>
             <p>{{ $package->name }}</p>
         </div>
-        <a href="{{ route('admin.packages.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
+        <a href="{{ route('admin.packages.index') }}" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver</a>
     </section>
 
     @php
@@ -146,10 +146,10 @@
                             <input type="checkbox" x-model="feature.visible_summary" :name="'features['+index+'][visible_summary]'" value="1">
                             <span>Resumen</span>
                         </label>
-                        <button type="button" @click="removeFeature(index)" class="admin-btn admin-btn--ghost">✕</button>
+                        <button type="button" @click="removeFeature(index)" class="admin-btn admin-btn--ghost" aria-label="Eliminar característica"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button>
                     </div>
                 </template>
-                <button type="button" @click="addFeature()" class="admin-btn admin-btn--ghost">+ Agregar característica</button>
+                <button type="button" @click="addFeature()" class="admin-btn admin-btn--ghost"><i class="fa-solid fa-plus" aria-hidden="true"></i> Agregar característica</button>
             </div>
         </fieldset>
 
