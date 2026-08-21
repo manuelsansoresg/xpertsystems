@@ -27,4 +27,27 @@ class LandingTest extends TestCase
             ->assertOk()
             ->assertSee(route('quote.store', ['package' => 'tienda-en-linea']), false);
     }
+
+    public function test_package_cards_only_show_selected_summary_features(): void
+    {
+        $package = Package::create([
+            'name' => 'Paquete visible',
+            'slug' => 'paquete-visible',
+            'short_description' => 'Descripción de prueba',
+            'price_type' => 'fixed',
+            'price' => 1000,
+            'active' => true,
+            'public_visibility' => true,
+        ]);
+        $package->featureItems()->createMany([
+            ['title' => 'Característica seleccionada única', 'visible_summary' => true, 'sort_order' => 1, 'active' => true],
+            ['title' => 'Característica no seleccionada única', 'visible_summary' => false, 'sort_order' => 2, 'active' => true],
+        ]);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Característica seleccionada única')
+            ->assertDontSee('Característica no seleccionada única')
+            ->assertDontSee('Ver detalles');
+    }
 }

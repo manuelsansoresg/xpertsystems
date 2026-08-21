@@ -177,6 +177,43 @@ final class PackageModuleTest extends TestCase
         $this->assertCount(1, $detailFeatures);
     }
 
+    public function test_updating_price_preserves_feature_summary_selection(): void
+    {
+        $admin = $this->userWithRole('admin');
+        $package = Package::create([
+            'name' => 'Editable Package',
+            'slug' => 'editable-package',
+            'short_description' => 'Test',
+            'price_type' => 'fixed',
+            'price' => 1000,
+            'active' => true,
+        ]);
+        $package->featureItems()->createMany([
+            ['title' => 'Summary Feature', 'visible_summary' => true, 'sort_order' => 1],
+            ['title' => 'Detail Feature', 'visible_summary' => false, 'sort_order' => 2],
+        ]);
+
+        $response = $this->actingAs($admin)->put(route('admin.packages.update', $package), [
+            'name' => $package->name,
+            'slug' => $package->slug,
+            'short_description' => $package->short_description,
+            'price_type' => $package->price_type,
+            'price' => 1500,
+            'active' => true,
+            'features' => [
+                ['title' => 'Summary Feature', 'visible_summary' => '1'],
+                ['title' => 'Detail Feature'],
+            ],
+        ]);
+
+        $response->assertRedirect(route('admin.packages.index'));
+
+        $package->refresh()->load('featureItems');
+        $this->assertSame('1500.00', $package->price);
+        $this->assertTrue($package->featureItems[0]->visible_summary);
+        $this->assertFalse($package->featureItems[1]->visible_summary);
+    }
+
     public function test_renewal_appears_when_enabled(): void
     {
         Package::create([

@@ -201,7 +201,6 @@
                         @foreach($packages as $package)
                             @php
                                 $summaryFeatures = $package->featureItems->where('visible_summary', true)->where('active', true);
-                                $detailFeatures = $package->featureItems->where('visible_summary', false)->where('active', true);
                             @endphp
 
                             <article class="pkg pkg--{{ $package->is_featured ? 'featured' : ($loop->first ? 'starter' : 'store') }} package-reveal">
@@ -234,20 +233,6 @@
                                 <ul class="pkg__features">
                                     @foreach($summaryFeatures as $feature)<li><span>✓</span>{{ $feature->title }}</li>@endforeach
                                 </ul>
-
-                                @if($detailFeatures->isNotEmpty())
-                                    <div class="pkg__details" x-data="{ open: false }">
-                                        <button type="button" class="pkg__details-toggle" @click="open = !open" :aria-expanded="open">
-                                            <span x-text="open ? 'Ver menos' : 'Ver detalles'"></span>
-                                            <i x-text="open ? '−' : '+'"></i>
-                                        </button>
-                                        <div x-show="open" x-collapse>
-                                            <ul class="pkg__details-list">
-                                                @foreach($detailFeatures as $feature)<li><span>✓</span>{{ $feature->title }}</li>@endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                @endif
 
                                 @if($package->renewal_enabled && $package->renewal_public_text)
                                     <p class="pkg__note">{{ $package->renewal_public_text }}</p>

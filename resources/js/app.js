@@ -70,7 +70,12 @@ Alpine.data('sellerForm', () => ({
 }));
 
 Alpine.data('packageForm', (existingFeatures = []) => ({
-    features: existingFeatures.length > 0 ? existingFeatures : [],
+    features: existingFeatures.map(feature => ({
+        title: feature.title ?? '',
+        visible_summary: feature.visible_summary === true
+            || feature.visible_summary === 1
+            || feature.visible_summary === '1',
+    })),
     renewalEnabled: false,
     init() {
         const renewalCheckbox = this.$el.querySelector('input[name="renewal_enabled"]');

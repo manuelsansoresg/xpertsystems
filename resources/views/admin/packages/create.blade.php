@@ -8,7 +8,7 @@
         <a href="{{ route('admin.packages.index') }}" class="admin-btn admin-btn--ghost">← Volver</a>
     </section>
 
-    <form method="POST" action="{{ route('admin.packages.store') }}" class="admin-form" x-data="packageForm()">
+    <form method="POST" action="{{ route('admin.packages.store') }}" class="admin-form" x-data="packageForm({{ Js::from(old('features', [])) }})">
         @csrf
 
         @if($errors->any())
@@ -130,9 +130,9 @@
             <div class="admin-form__features">
                 <template x-for="(feature, index) in features" :key="index">
                     <div class="admin-form__feature-row">
-                        <input type="text" x-model="feature.title" placeholder="Característica" style="flex: 2">
+                        <input type="text" x-model="feature.title" :name="'features['+index+'][title]'" placeholder="Característica" style="flex: 2">
                         <label class="admin-form__feature-check">
-                            <input type="checkbox" x-model="feature.visible_summary">
+                            <input type="checkbox" x-model="feature.visible_summary" :name="'features['+index+'][visible_summary]'" value="1">
                             <span>Resumen</span>
                         </label>
                         <button type="button" @click="removeFeature(index)" class="admin-btn admin-btn--ghost">✕</button>
@@ -140,10 +140,6 @@
                 </template>
                 <button type="button" @click="addFeature()" class="admin-btn admin-btn--ghost">+ Agregar característica</button>
             </div>
-            <template x-for="(feature, index) in features" :key="'hidden-'+index">
-                <input type="hidden" :name="'features['+index+'][title]'" :value="feature.title">
-                <input type="hidden" :name="'features['+index+'][visible_summary]'" :value="feature.visible_summary ? '1' : ''">
-            </template>
         </fieldset>
 
         <div class="admin-form__actions">
