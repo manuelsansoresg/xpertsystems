@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'whatsapp_number' => env('WHATSAPP_NUMBER'),
+    'whatsapp_number' => env('WHATSAPP_NUMBER', '529992685617'),
     'contact_email' => env('CONTACT_EMAIL'),
     'admin' => [
         'name' => env('ADMIN_NAME'),
