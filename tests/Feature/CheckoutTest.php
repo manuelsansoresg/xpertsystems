@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\Setting;
 use Database\Seeders\PackageSeeder;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -52,6 +53,35 @@ class CheckoutTest extends TestCase
             ->assertSee('Contratar Landing')
             ->assertSee('href="'.route('checkout.show', $professional).'"', false)
             ->assertSee('Contratar Profesional');
+    }
+
+    public function test_home_store_button_points_directly_to_whatsapp(): void
+    {
+        Setting::query()->where('key', 'whatsapp_number')->update(['value' => '5219990001111']);
+        $expectedUrl = 'https://wa.me/5219990001111?text='.rawurlencode('Hola, quiero cotizar el paquete Tienda en Línea con XpertSystems.');
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('href="'.$expectedUrl.'"', false)
+            ->assertSee('Cotizar mi tienda')
+            ->assertSee('data-package="tienda-en-linea"', false);
+    }
+
+    public function test_prices_page_keeps_all_packages_and_their_correct_actions(): void
+    {
+        Setting::query()->where('key', 'whatsapp_number')->update(['value' => '5219990001111']);
+        $landing = Package::where('slug', 'landing-page')->firstOrFail();
+        $professional = Package::where('slug', 'pagina-profesional')->firstOrFail();
+
+        $this->get(route('precios'))
+            ->assertOk()
+            ->assertSee('Landing Page')
+            ->assertSee('href="'.route('checkout.show', $landing).'"', false)
+            ->assertSee('Página Profesional')
+            ->assertSee('href="'.route('checkout.show', $professional).'"', false)
+            ->assertSee('Tienda en Línea')
+            ->assertSee('href="https://wa.me/5219990001111?', false)
+            ->assertSee('Solicitar cotización');
     }
 
     public function test_professional_checkout_calculates_price_on_the_server(): void

@@ -257,7 +257,8 @@
 
                                 <div class="pkg__action">
                                     @if($package->requires_quote)
-                                        <button type="button" @click="open({{ $package->id }})" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="select_package">Cotizar <span>→</span></button>
+                                        @php($packageWa = $whatsapp ? $waBase.rawurlencode("Hola, quiero cotizar el paquete {$package->name} con XpertSystems.") : '#contacto')
+                                        <a href="{{ $packageWa }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="contact_whatsapp">{{ $package->button_text ?? 'Cotizar' }} <span>→</span></a>
                                     @elseif($package->direct_checkout)
                                         <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></a>
                                     @else
