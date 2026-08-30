@@ -1,4 +1,8 @@
 {
+  "_checkout-modal-q40tmGjw.js": {
+    "file": "assets/checkout-modal-q40tmGjw.js",
+    "name": "checkout-modal"
+  },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
     "file": "assets/fa-solid-900-IAB4Droh.woff2",
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
@@ -16,10 +20,22 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DL8KKu8C.js",
+    "file": "assets/app-DcpFA7nj.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "imports": [
+      "_checkout-modal-q40tmGjw.js"
+    ]
+  },
+  "resources/js/pricing.js": {
+    "file": "assets/pricing-C5Q5aOEn.js",
+    "name": "pricing",
+    "src": "resources/js/pricing.js",
+    "isEntry": true,
+    "imports": [
+      "_checkout-modal-q40tmGjw.js"
+    ]
   },
   "resources/js/seo.js": {
     "file": "assets/seo-Bn5_Z-To.js",

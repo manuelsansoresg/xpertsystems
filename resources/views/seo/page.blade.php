@@ -26,7 +26,7 @@
     ];
 @endphp
 
-<x-layouts.app :title="$title" :description="$description" :canonical="$canonical" script="resources/js/seo.js">
+<x-layouts.app :title="$title" :description="$description" :canonical="$canonical" :script="$page === 'precios' ? ['resources/js/pricing.js', 'resources/js/seo.js'] : 'resources/js/seo.js'">
     @push('head')
         <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush
@@ -97,26 +97,7 @@
             @endif
 
             @if($page === 'precios')
-                <section class="seo-packages section--light" aria-labelledby="packages-title">
-                    <div class="container"><p class="seo-section-label">Paquetes disponibles</p><h2 id="packages-title">Compara alcance, precio y renovación</h2>
-                        <div class="seo-package-grid">
-                            @foreach($packages as $package)
-                                <article @class(['is-featured' => $package->is_featured])>
-                                    @if($package->badge)<p class="seo-package-badge">{{ $package->badge }}</p>@endif
-                                    <h3>{{ $package->name }}</h3><p>{{ $package->short_description }}</p>
-                                    <p class="seo-package-price">{{ $package->price_type === 'starting_at' ? 'Desde ' : '' }}${{ number_format((float) $package->price, 0) }} <small>MXN</small></p>
-                                    <ul>@foreach($package->featureItems->where('active', true)->take(6) as $feature)<li>{{ $feature->title }}</li>@endforeach</ul>
-                                    @if($package->renewal_public_text)<p class="seo-package-renewal">{{ $package->renewal_public_text }}</p>@endif
-                                    @if($package->requires_quote)
-                                        <a href="{{ $waUrl }}" class="button button--navy button--full" data-analytics="quote_request" data-package="{{ $package->slug }}">Solicitar cotización <span>→</span></a>
-                                    @else
-                                        <a href="{{ route('home', ['checkout' => $package->slug]) }}#paquetes" class="button button--navy button--full" data-analytics="begin_checkout" data-package="{{ $package->slug }}">{{ $package->button_text ?: 'Contratar' }} <span>→</span></a>
-                                    @endif
-                                </article>
-                            @endforeach
-                        </div>
-                    </div>
-                </section>
+                @include('partials.package-pricing', ['checkoutSource' => 'precios'])
             @endif
 
             @if(count($includes))

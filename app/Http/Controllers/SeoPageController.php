@@ -23,7 +23,7 @@ final class SeoPageController extends Controller
         return view('seo.page', [
             ...$pages[$page],
             'page' => $page,
-            'packages' => Package::query()->where('active', true)->orderBy('sort_order')->get(),
+            'packages' => Package::query()->with('featureItems')->where('active', true)->orderBy('sort_order')->get(),
             'projects' => Project::query()->where('active', true)->orderBy('sort_order')->get(),
             'whatsapp' => preg_replace('/\D+/', '', (string) ($settings->get('whatsapp_number') ?: config('xpertsystems.whatsapp_number', ''))),
             'contactEmail' => $settings->get('contact_email') ?: config('xpertsystems.contact_email', ''),

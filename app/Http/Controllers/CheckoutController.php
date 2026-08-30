@@ -58,7 +58,9 @@ class CheckoutController extends Controller
         } catch (Throwable $exception) {
             report($exception);
 
-            return redirect(route('home', ['checkout' => $package->slug]).'#paquetes')
+            $returnRoute = ($data['checkout_source'] ?? 'home') === 'precios' ? 'precios' : 'home';
+
+            return redirect(route($returnRoute, ['checkout' => $package->slug]).'#paquetes')
                 ->withInput($request->except(['terms', 'website']))
                 ->with('payment_error', 'Guardamos tus datos, pero el pago todavía no está disponible. Escríbenos por WhatsApp y te ayudamos a continuar.');
         }

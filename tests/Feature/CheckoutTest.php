@@ -66,18 +66,21 @@ class CheckoutTest extends TestCase
     public function test_prices_page_keeps_all_packages_and_their_correct_actions(): void
     {
         Setting::query()->where('key', 'whatsapp_number')->update(['value' => '5219990001111']);
-        $landing = Package::where('slug', 'landing-page')->firstOrFail();
-        $professional = Package::where('slug', 'pagina-profesional')->firstOrFail();
 
         $this->get(route('precios'))
             ->assertOk()
+            ->assertSee('class="pricing__grid"', false)
+            ->assertSee('class="pkg pkg--starter package-reveal"', false)
             ->assertSee('Landing Page')
-            ->assertSee('href="'.route('home', ['checkout' => $landing->slug]).'#paquetes"', false)
+            ->assertSee("@click=\"openCheckout('landing-page')\"", false)
             ->assertSee('Página Profesional')
-            ->assertSee('href="'.route('home', ['checkout' => $professional->slug]).'#paquetes"', false)
+            ->assertSee("@click=\"openCheckout('pagina-profesional')\"", false)
             ->assertSee('Tienda en Línea')
             ->assertSee('href="https://wa.me/5219990001111?', false)
-            ->assertSee('Solicitar cotización');
+            ->assertSee('Cotizar mi tienda')
+            ->assertSee('name="checkout_source" value="precios"', false)
+            ->assertDontSee('seo-package-grid')
+            ->assertDontSee(route('home', ['checkout' => 'landing-page']).'#paquetes', false);
     }
 
     public function test_professional_checkout_calculates_price_on_the_server(): void
@@ -285,6 +288,27 @@ class CheckoutTest extends TestCase
             'status' => OrderStatus::AwaitingPayment->value,
             'total_amount' => 1900,
         ]);
+    }
+
+    public function test_payment_failure_returns_to_prices_when_checkout_started_there(): void
+    {
+        config(['services.mercado_pago.access_token' => 'test-token']);
+        Http::fake([
+            'api.mercadopago.com/checkout/preferences' => Http::response([], 500),
+        ]);
+        $package = Package::where('slug', 'landing-page')->firstOrFail();
+
+        $response = $this->post(route('checkout.store', $package), [
+            'name' => 'Ana Ruiz',
+            'email' => 'ana@example.com',
+            'whatsapp' => '+52 999 111 2233',
+            'country' => 'MX',
+            'terms' => '1',
+            'checkout_source' => 'precios',
+        ]);
+
+        $response->assertRedirect(route('precios', ['checkout' => $package->slug]).'#paquetes');
+        $response->assertSessionHas('payment_error');
     }
 
     public function test_unsigned_webhook_is_rejected(): void

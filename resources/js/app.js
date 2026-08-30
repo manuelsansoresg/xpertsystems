@@ -2,6 +2,7 @@ import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import checkoutModal from './components/checkout-modal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,27 +27,7 @@ Alpine.data('portfolioShowcase', (projects) => ({
     previous() { if (this.projects.length) this.active = (this.active - 1 + this.projects.length) % this.projects.length; },
 }));
 
-Alpine.data('checkoutModal', (packages = {}, initialSlug = null) => ({
-    visible: false,
-    action: '',
-    packageSlug: '',
-    packageName: '',
-    packagePrice: '',
-    init() {
-        if (initialSlug && packages[initialSlug]) this.openCheckout(initialSlug);
-    },
-    openCheckout(slug) {
-        const selected = packages[slug];
-        if (!selected) return;
-        this.action = selected.action;
-        this.packageSlug = slug;
-        this.packageName = selected.name;
-        this.packagePrice = selected.price;
-        this.visible = true;
-        document.body.classList.add('menu-locked');
-    },
-    close() { this.visible = false; document.body.classList.remove('menu-locked'); },
-}));
+Alpine.data('checkoutModal', checkoutModal);
 
 Alpine.data('sellerForm', () => ({
     name: '',

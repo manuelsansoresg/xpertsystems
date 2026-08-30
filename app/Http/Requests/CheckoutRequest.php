@@ -15,7 +15,7 @@ class CheckoutRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $clean = fn ($value) => is_string($value) ? trim(strip_tags($value)) : $value;
-        $this->merge(collect($this->only(['name', 'email', 'whatsapp', 'country', 'business_name']))
+        $this->merge(collect($this->only(['name', 'email', 'whatsapp', 'country', 'business_name', 'checkout_source']))
             ->map($clean)->all());
     }
 
@@ -27,6 +27,7 @@ class CheckoutRequest extends FormRequest
             'whatsapp' => ['required', 'string', 'regex:/^[0-9+()\-\s]{8,24}$/'],
             'country' => ['required', Rule::in(['MX'])],
             'business_name' => ['nullable', 'string', 'min:2', 'max:140'],
+            'checkout_source' => ['nullable', Rule::in(['home', 'precios'])],
             'website' => ['nullable', 'prohibited'],
             'terms' => ['accepted'],
         ];
