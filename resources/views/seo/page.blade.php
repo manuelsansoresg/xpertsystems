@@ -110,7 +110,7 @@
                                     @if($package->requires_quote)
                                         <a href="{{ $waUrl }}" class="button button--navy button--full" data-analytics="quote_request" data-package="{{ $package->slug }}">Solicitar cotización <span>→</span></a>
                                     @else
-                                        <a href="{{ route('checkout.show', $package) }}" class="button button--navy button--full" data-analytics="begin_checkout" data-package="{{ $package->slug }}">{{ $package->button_text ?: 'Contratar' }} <span>→</span></a>
+                                        <a href="{{ route('home', ['checkout' => $package->slug]) }}#paquetes" class="button button--navy button--full" data-analytics="begin_checkout" data-package="{{ $package->slug }}">{{ $package->button_text ?: 'Contratar' }} <span>→</span></a>
                                     @endif
                                 </article>
                             @endforeach

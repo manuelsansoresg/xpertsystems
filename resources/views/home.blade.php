@@ -202,9 +202,15 @@
             </section>
 
             @php
-                $quotePackage = $packages->firstWhere('requires_quote', true);
+                $checkoutOptions = $packages->where('direct_checkout', true)->mapWithKeys(fn ($package) => [
+                    $package->slug => [
+                        'action' => route('checkout.store', $package),
+                        'name' => $package->name,
+                        'price' => '$'.number_format((float) $package->price, 0).' MXN',
+                    ],
+                ])->all();
             @endphp
-            <section id="paquetes" class="pricing section--cream" x-data="quoteModal">
+            <section id="paquetes" class="pricing section--cream" x-data="checkoutModal(@js($checkoutOptions), @js(old('package_slug', request()->query('checkout'))))">
                 <div class="container">
                     <header class="pricing__header">
                         <div class="section-kicker"><span>05</span> Elige cómo empezar</div>
@@ -260,9 +266,9 @@
                                         @php($packageWa = $whatsapp ? $waBase.rawurlencode("Hola, quiero cotizar el paquete {$package->name} con XpertSystems.") : '#contacto')
                                         <a href="{{ $packageWa }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener" class="button button--navy button--full" data-package="{{ $package->slug }}" data-analytics="contact_whatsapp">{{ $package->button_text ?? 'Cotizar' }} <span>→</span></a>
                                     @elseif($package->direct_checkout)
-                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></a>
+                                        <button type="button" @click="openCheckout('{{ $package->slug }}')" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></button>
                                     @else
-                                        <a href="{{ route('checkout.show', $package) }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}" data-analytics="select_package">{{ $package->button_text ?? 'Contratar' }} <span>→</span></a>
+                                        <a href="{{ route('contacto') }}" class="button {{ $package->is_featured ? 'button--gold' : 'button--navy' }} button--full" data-package="{{ $package->slug }}">{{ $package->button_text ?? 'Consultar' }} <span>→</span></a>
                                     @endif
                                 </div>
                             </article>
@@ -286,23 +292,27 @@
                     </div>
                 </div>
 
-                @if($quotePackage)
-                <div class="modal" x-cloak x-show="visible" x-transition.opacity @keydown.escape.window="close" role="dialog" aria-modal="true" aria-labelledby="quote-title">
-                    <button class="modal__backdrop" @click="close" aria-label="Cerrar cotización"></button>
+                @if($checkoutOptions)
+                <div class="modal" x-cloak x-show="visible" x-transition.opacity @keydown.escape.window="close" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+                    <button class="modal__backdrop" @click="close" aria-label="Cerrar checkout"></button>
                     <div class="modal__panel" x-show="visible" x-transition>
                         <button type="button" class="modal__close" @click="close" aria-label="Cerrar">×</button>
-                        <div class="section-kicker"><span>TIENDA</span> Cotización personalizada</div>
-                        <h2 id="quote-title">Cuéntanos qué quieres vender.</h2>
-                        <p>Revisamos tus productos, envíos e integraciones antes de darte una cifra definitiva.</p>
-                        <form method="POST" action="{{ route('quote.store', $quotePackage) }}" class="quote-form" data-analytics-submit="form_submit" data-package="{{ $quotePackage->slug }}">
+                        <div class="section-kicker"><span>CHECKOUT</span> Pago seguro</div>
+                        <h2 id="checkout-title">Completa tus datos para contratar <span x-text="packageName"></span>.</h2>
+                        <p>Importe del paquete: <strong x-text="packagePrice"></strong>. Al continuar irás directamente a Mercado Pago.</p>
+                        <form method="POST" :action="action" class="quote-form" data-analytics-submit="form_submit" :data-package="packageSlug">
                             @csrf
                             <div class="honeypot" aria-hidden="true"><label>Tu sitio web<input name="website" tabindex="-1" autocomplete="off"></label></div>
-                            <label><span>Nombre</span><input name="name" required maxlength="100" autocomplete="name"></label>
-                            <label><span>Correo</span><input name="email" type="email" required maxlength="160" autocomplete="email"></label>
-                            <label><span>WhatsApp</span><input name="whatsapp" required maxlength="24" autocomplete="tel"></label>
-                            <label><span>Nombre del negocio <small>(opcional)</small></span><input name="business_name" maxlength="140" autocomplete="organization"></label>
-                            <label class="field--full"><span>¿Qué necesitas?</span><textarea name="message" rows="3" maxlength="1200" placeholder="Productos, envíos o funciones especiales"></textarea></label>
-                            <button class="button button--gold button--full" type="submit">Enviar y continuar <span>→</span></button>
+                            @if(session('payment_error'))<div class="form-alert field--full" role="alert">{{ session('payment_error') }}</div>@endif
+                            <label><span>Nombre completo</span><input name="name" value="{{ old('name') }}" required maxlength="100" autocomplete="name">@error('name')<small class="form-error" role="alert">{{ $message }}</small>@enderror</label>
+                            <label><span>Correo</span><input name="email" type="email" value="{{ old('email') }}" required maxlength="160" autocomplete="email">@error('email')<small class="form-error" role="alert">{{ $message }}</small>@enderror</label>
+                            <label><span>WhatsApp</span><input name="whatsapp" value="{{ old('whatsapp') }}" required maxlength="24" autocomplete="tel" inputmode="tel">@error('whatsapp')<small class="form-error" role="alert">{{ $message }}</small>@enderror</label>
+                            <label><span>Nombre del negocio <small>(opcional)</small></span><input name="business_name" value="{{ old('business_name') }}" maxlength="140" autocomplete="organization">@error('business_name')<small class="form-error" role="alert">{{ $message }}</small>@enderror</label>
+                            <input type="hidden" name="country" value="MX">
+                            <input type="hidden" name="package_slug" :value="packageSlug">
+                            <label class="terms-check field--full"><input name="terms" type="checkbox" value="1" required {{ old('terms') ? 'checked' : '' }}><span>Acepto el <a href="{{ route('privacy') }}" target="_blank">aviso de privacidad</a> y los <a href="{{ route('terms') }}" target="_blank">términos del servicio</a>.</span></label>
+                            @error('terms')<small class="form-error field--full" role="alert">{{ $message }}</small>@enderror
+                            <button class="button button--gold button--full field--full" type="submit" data-analytics="begin_checkout">Continuar a Mercado Pago <span>→</span></button>
                         </form>
                     </div>
                 </div>

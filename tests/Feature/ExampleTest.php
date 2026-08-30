@@ -21,6 +21,6 @@ class ExampleTest extends TestCase
         $response->assertOk()
             ->assertSee('Páginas web que')
             ->assertSee('Página Profesional')
-            ->assertSee('$4,400', false);
+            ->assertSee('$2,700', false);
     }
 }

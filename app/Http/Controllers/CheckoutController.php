@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
 use App\Http\Requests\CheckoutRequest;
+use App\Mail\OrderCheckoutStarted;
 use App\Models\Lead;
 use App\Models\Order;
 use App\Models\Package;
@@ -13,26 +14,13 @@ use App\Services\Payments\PaymentServiceResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
 
 class CheckoutController extends Controller
 {
-    public function show(Package $package): View|RedirectResponse
-    {
-        abort_unless($package->active, 404);
-
-        if (! $package->direct_checkout) {
-            return redirect(route('home').'#paquetes');
-        }
-
-        return view('checkout.show', [
-            'package' => $package,
-            'whatsapp' => $this->whatsapp(),
-        ]);
-    }
-
     public function store(CheckoutRequest $request, Package $package, PaymentServiceResolver $resolver): RedirectResponse
     {
         abort_unless($package->active && $package->direct_checkout, 404);
@@ -67,14 +55,21 @@ class CheckoutController extends Controller
                 throw new \RuntimeException('No se recibió una liga de pago.');
             }
 
-            return redirect()->away($payment->checkout_url);
         } catch (Throwable $exception) {
             report($exception);
 
-            return redirect()->route('checkout.show', $package)
+            return redirect(route('home', ['checkout' => $package->slug]).'#paquetes')
                 ->withInput($request->except(['terms', 'website']))
                 ->with('payment_error', 'Guardamos tus datos, pero el pago todavía no está disponible. Escríbenos por WhatsApp y te ayudamos a continuar.');
         }
+
+        try {
+            Mail::to($order->customer_email)->send(new OrderCheckoutStarted($order, $payment->checkout_url));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
+
+        return redirect()->away($payment->checkout_url);
     }
 
     public function paymentResult(

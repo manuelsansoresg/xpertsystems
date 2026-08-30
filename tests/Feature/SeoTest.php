@@ -68,10 +68,10 @@ final class SeoTest extends TestCase
             ->assertSee('Sitemap: '.route('sitemap'), false);
     }
 
-    public function test_checkout_and_legal_pages_are_not_indexable(): void
+    public function test_legal_pages_are_not_indexable_and_checkout_has_no_get_page(): void
     {
         $this->get(route('privacy'))->assertOk()->assertSee('content="noindex,follow"', false);
         $this->get(route('terms'))->assertOk()->assertSee('content="noindex,follow"', false);
-        $this->get(route('checkout.show', 'landing-page'))->assertOk()->assertSee('content="noindex,nofollow"', false);
+        $this->get('/contratar/landing-page')->assertStatus(405);
     }
 }

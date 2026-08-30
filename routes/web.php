@@ -31,7 +31,6 @@ Route::get('/portafolio', SeoPageController::class)->defaults('page', 'portafoli
 Route::get('/precios', SeoPageController::class)->defaults('page', 'precios')->name('precios');
 Route::get('/contacto', SeoPageController::class)->defaults('page', 'contacto')->name('contacto');
 
-Route::get('/contratar/{package:slug}', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/contratar/{package:slug}', [CheckoutController::class, 'store'])
     ->middleware('throttle:6,1')->name('checkout.store');
 Route::get('/pago/{order}/exitoso', [CheckoutController::class, 'paymentResult'])

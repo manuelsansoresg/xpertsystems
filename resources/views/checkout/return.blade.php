@@ -48,7 +48,7 @@
 
             <div class="return-actions">
                 @if($state === 'failure')
-                    <a class="button button--gold" href="{{ route('checkout.show', $order->package) }}">Intentar de nuevo <span>→</span></a>
+                    <a class="button button--gold" href="{{ route('home', ['checkout' => $order->package->slug]) }}#paquetes">Intentar de nuevo <span>→</span></a>
                 @endif
                 <a class="button button--navy" href="{{ $waUrl }}" target="{{ $whatsapp ? '_blank' : '_self' }}" rel="noopener">Hablar con un asesor <span>↗</span></a>
                 <a class="return-actions__home" href="{{ route('home') }}">Volver al inicio</a>

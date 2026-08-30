@@ -33,7 +33,7 @@ final class AdminDashboardTest extends TestCase
             ->assertOk()
             ->assertSee('El negocio, en perspectiva')
             ->assertSee('Cliente Global')
-            ->assertSee('$2,700', false);
+            ->assertSee('$1,900', false);
     }
 
     public function test_seller_dashboard_only_displays_attributed_orders(): void

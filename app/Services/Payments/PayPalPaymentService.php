@@ -43,7 +43,7 @@ class PayPalPaymentService implements PaymentServiceInterface
                     'brand_name' => 'XpertSystems', 'shipping_preference' => 'NO_SHIPPING',
                     'user_action' => 'PAY_NOW',
                     'return_url' => route('checkout.return', ['order' => $order->reference]),
-                    'cancel_url' => route('checkout.show', $order->package),
+                    'cancel_url' => route('home', ['checkout' => $order->package->slug]).'#paquetes',
                 ]]],
             ])->throw()->json();
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\OrderStatus;
+use App\Mail\OrderCheckoutStarted;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\Setting;
@@ -10,6 +11,8 @@ use Database\Seeders\PackageSeeder;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
@@ -22,36 +25,29 @@ class CheckoutTest extends TestCase
     {
         parent::setUp();
         $this->withoutMiddleware([PreventRequestForgery::class]);
+        Mail::fake();
     }
 
-    public function test_landing_checkout_page_renders(): void
+    public function test_checkout_form_is_embedded_in_home_and_has_no_standalone_page(): void
     {
-        $this->get('/contratar/landing-page')
+        $this->assertNull(Route::getRoutes()->getByName('checkout.show'));
+
+        $this->get(route('home', ['checkout' => 'landing-page']))
             ->assertOk()
             ->assertSee('CHECKOUT')
             ->assertSee('Landing Page')
-            ->assertSee(number_format(1900, 0));
+            ->assertSee('Continuar a Mercado Pago');
+
+        $this->get('/contratar/landing-page')->assertStatus(405);
     }
 
-    public function test_professional_checkout_page_renders(): void
+    public function test_home_direct_checkout_buttons_open_the_embedded_form(): void
     {
-        $this->get('/contratar/pagina-profesional')
-            ->assertOk()
-            ->assertSee('CHECKOUT')
-            ->assertSee('Página Profesional')
-            ->assertSee(number_format(2700, 0));
-    }
-
-    public function test_home_direct_checkout_buttons_point_to_package_slugs(): void
-    {
-        $landing = Package::where('slug', 'landing-page')->firstOrFail();
-        $professional = Package::where('slug', 'pagina-profesional')->firstOrFail();
-
         $this->get(route('home'))
             ->assertOk()
-            ->assertSee('href="'.route('checkout.show', $landing).'"', false)
+            ->assertSee("@click=\"openCheckout('landing-page')\"", false)
             ->assertSee('Contratar Landing')
-            ->assertSee('href="'.route('checkout.show', $professional).'"', false)
+            ->assertSee("@click=\"openCheckout('pagina-profesional')\"", false)
             ->assertSee('Contratar Profesional');
     }
 
@@ -76,9 +72,9 @@ class CheckoutTest extends TestCase
         $this->get(route('precios'))
             ->assertOk()
             ->assertSee('Landing Page')
-            ->assertSee('href="'.route('checkout.show', $landing).'"', false)
+            ->assertSee('href="'.route('home', ['checkout' => $landing->slug]).'#paquetes"', false)
             ->assertSee('Página Profesional')
-            ->assertSee('href="'.route('checkout.show', $professional).'"', false)
+            ->assertSee('href="'.route('home', ['checkout' => $professional->slug]).'#paquetes"', false)
             ->assertSee('Tienda en Línea')
             ->assertSee('href="https://wa.me/5219990001111?', false)
             ->assertSee('Solicitar cotización');
@@ -108,6 +104,11 @@ class CheckoutTest extends TestCase
         $this->assertSame('2700.00', $order->deposit_amount);
         $this->assertSame('0.00', $order->balance_amount);
         $this->assertSame(OrderStatus::AwaitingPayment, $order->status);
+        Mail::assertSent(OrderCheckoutStarted::class, function (OrderCheckoutStarted $mail) use ($order): bool {
+            return $mail->hasTo('maria@example.com')
+                && $mail->order->is($order)
+                && $mail->checkoutUrl === 'https://sandbox.mercadopago.com/checkout/pref-123';
+        });
 
         Http::assertSent(function ($request) use ($order): bool {
             return $request->url() === 'https://api.mercadopago.com/checkout/preferences'
@@ -150,10 +151,9 @@ class CheckoutTest extends TestCase
         ]);
     }
 
-    public function test_store_package_cannot_enter_direct_checkout(): void
+    public function test_store_package_has_no_checkout_page(): void
     {
-        $this->get('/contratar/tienda-en-linea')
-            ->assertRedirect(route('home').'#paquetes');
+        $this->get('/contratar/tienda-en-linea')->assertStatus(405);
     }
 
     public function test_package_seeder_enables_direct_checkout_for_landing_and_professional(): void
@@ -276,7 +276,7 @@ class CheckoutTest extends TestCase
             'terms' => '1',
         ]);
 
-        $response->assertRedirect(route('checkout.show', $package));
+        $response->assertRedirect(route('home', ['checkout' => $package->slug]).'#paquetes');
         $response->assertSessionHas('payment_error');
 
         $this->assertDatabaseHas('leads', ['email' => 'ana@example.com']);
