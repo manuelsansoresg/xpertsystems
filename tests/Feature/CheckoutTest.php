@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Package;
+use Database\Seeders\PackageSeeder;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -18,14 +20,12 @@ class CheckoutTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class]);
+        $this->withoutMiddleware([PreventRequestForgery::class]);
     }
 
     public function test_landing_checkout_page_renders(): void
     {
-        $package = Package::where('slug', 'landing-page')->firstOrFail();
-
-        $this->get(route('checkout.show', $package))
+        $this->get('/contratar/landing-page')
             ->assertOk()
             ->assertSee('CHECKOUT')
             ->assertSee('Landing Page')
@@ -34,13 +34,24 @@ class CheckoutTest extends TestCase
 
     public function test_professional_checkout_page_renders(): void
     {
-        $package = Package::where('slug', 'pagina-profesional')->firstOrFail();
-
-        $this->get(route('checkout.show', $package))
+        $this->get('/contratar/pagina-profesional')
             ->assertOk()
             ->assertSee('CHECKOUT')
             ->assertSee('Página Profesional')
             ->assertSee(number_format(2700, 0));
+    }
+
+    public function test_home_direct_checkout_buttons_point_to_package_slugs(): void
+    {
+        $landing = Package::where('slug', 'landing-page')->firstOrFail();
+        $professional = Package::where('slug', 'pagina-profesional')->firstOrFail();
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('href="'.route('checkout.show', $landing).'"', false)
+            ->assertSee('Contratar Landing')
+            ->assertSee('href="'.route('checkout.show', $professional).'"', false)
+            ->assertSee('Contratar Profesional');
     }
 
     public function test_professional_checkout_calculates_price_on_the_server(): void
@@ -111,10 +122,49 @@ class CheckoutTest extends TestCase
 
     public function test_store_package_cannot_enter_direct_checkout(): void
     {
-        $package = Package::where('slug', 'tienda-en-linea')->firstOrFail();
-
-        $this->get(route('checkout.show', $package))
+        $this->get('/contratar/tienda-en-linea')
             ->assertRedirect(route('home').'#paquetes');
+    }
+
+    public function test_package_seeder_enables_direct_checkout_for_landing_and_professional(): void
+    {
+        Package::query()
+            ->whereIn('slug', ['landing-page', 'pagina-profesional'])
+            ->update(['direct_checkout' => false, 'requires_quote' => true]);
+
+        $this->seed(PackageSeeder::class);
+
+        $this->assertDatabaseHas('packages', [
+            'slug' => 'landing-page',
+            'price' => 1900,
+            'direct_checkout' => true,
+            'requires_quote' => false,
+        ]);
+        $this->assertDatabaseHas('packages', [
+            'slug' => 'pagina-profesional',
+            'price' => 2700,
+            'direct_checkout' => true,
+            'requires_quote' => false,
+        ]);
+        $this->assertSame(1, Package::withTrashed()->where('slug', 'landing-page')->count());
+        $this->assertSame(1, Package::withTrashed()->where('slug', 'pagina-profesional')->count());
+    }
+
+    public function test_package_seeder_keeps_store_as_quote_only(): void
+    {
+        Package::query()
+            ->where('slug', 'tienda-en-linea')
+            ->update(['price' => 1, 'direct_checkout' => true, 'requires_quote' => false]);
+
+        $this->seed(PackageSeeder::class);
+
+        $this->assertDatabaseHas('packages', [
+            'slug' => 'tienda-en-linea',
+            'price' => 3500,
+            'direct_checkout' => false,
+            'requires_quote' => true,
+        ]);
+        $this->assertSame(1, Package::withTrashed()->where('slug', 'tienda-en-linea')->count());
     }
 
     public function test_honeypot_rejects_automated_checkout(): void
