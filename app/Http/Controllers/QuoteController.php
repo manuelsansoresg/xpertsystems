@@ -22,7 +22,10 @@ class QuoteController extends Controller
 
         $stored = Setting::query()->where('key', 'whatsapp_number')->value('value');
         $number = preg_replace('/\D+/', '', (string) ($stored ?: config('xpertsystems.whatsapp_number')));
-        $message = rawurlencode("Hola, vi el paquete Tienda en Línea de XpertSystems. Soy {$data['name']} de {$data['business_name']} y quisiera cotizar mi proyecto.");
+
+        $business = trim($data['business_name'] ?? '');
+        $from = $business ? "Soy {$data['name']} de {$business}" : "Soy {$data['name']}";
+        $message = rawurlencode("Hola, vi el paquete Tienda en Línea de XpertSystems. {$from} y quisiera cotizar mi tienda. Me gustaría recibir información sobre el alcance del proyecto.");
 
         return $number
             ? redirect()->away("https://wa.me/{$number}?text={$message}")

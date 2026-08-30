@@ -299,7 +299,7 @@
                             <label><span>Nombre</span><input name="name" required maxlength="100" autocomplete="name"></label>
                             <label><span>Correo</span><input name="email" type="email" required maxlength="160" autocomplete="email"></label>
                             <label><span>WhatsApp</span><input name="whatsapp" required maxlength="24" autocomplete="tel"></label>
-                            <label><span>Nombre del negocio</span><input name="business_name" required maxlength="140" autocomplete="organization"></label>
+                            <label><span>Nombre del negocio <small>(opcional)</small></span><input name="business_name" maxlength="140" autocomplete="organization"></label>
                             <label class="field--full"><span>¿Qué necesitas?</span><textarea name="message" rows="3" maxlength="1200" placeholder="Productos, envíos o funciones especiales"></textarea></label>
                             <button class="button button--gold button--full" type="submit">Enviar y continuar <span>→</span></button>
                         </form>
